@@ -2,9 +2,9 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-export function addArticle({categoty, title, body, publisher_username}) {
-    const result = pool.query("INSERT INTO articles (categoty, title, body, publisher_username) VALUES (?, ?, ?, ?)",
-        [categoty, title, body, publisher_username]
+export function addArticle({categoty, title, body, username}) {
+    const result = pool.query("INSERT INTO articles (categoty, title, body, username) VALUES (?, ?, ?, ?)",
+        [categoty, title, body, username]
     );
 
     return result.insertid;
@@ -30,9 +30,9 @@ export function getArticlesByCategory({category}) {
     return rows;
 }
 
-export function getArticlesByPublisher({publisher_username}) {
-    const result = pool.query("SELECT * FROM articles WHERE publisher_username = ?", 
-        [publisher_username]
+export function getArticlesByUsername({username}) {
+    const result = pool.query("SELECT * FROM articles WHERE username = ?", 
+        [username]
     );
 
     const [rows] = result;
@@ -48,9 +48,9 @@ export function getArticles() {
 
 //// UPDATE ////
 
-export function updateArticleById({id, categoty, title, body, publisher_username}) {
-    const result = pool.query("UPDATE articles SET categoty = ?, title = ?, body = ?, publisher_username = ? WHERE Id = ? ",
-        [categoty, title, body, publisher_username, id]
+export function updateArticleById({id, categoty, title, body, username}) {
+    const result = pool.query("UPDATE articles SET categoty = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
+        [categoty, title, body, username, id]
     );
 
     return result.affectedRows > 0

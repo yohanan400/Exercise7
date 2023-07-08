@@ -40,7 +40,7 @@ export function getUserByEmail(email) {
     return rows;
 }
 
-export function getAllUsers() {
+export function getUsers() {
     const result = pool.query("SELECT * FROM users");
 
     const [rows] = result;
@@ -97,7 +97,13 @@ export function updateUserRullId(username, ruleId) {
     return result.affectedRows > 0
 }
 
-export function updateUser({ fullname, username, password, email }) {
+export function updateUser(newUserDetailes) {
+
+    const oldUserDetailes = getUserByUsername(newUserDetailes.username);
+
+    const {fullname, password, email , username} = {...oldUserDetailes, ...newUserDetailes};
+    
+
     const result = pool.query("UPDATE users SET fullname = ?, password = ?, email = ? WHERE username = ? ",
         [fullname, password, email, username]
     );
@@ -107,7 +113,7 @@ export function updateUser({ fullname, username, password, email }) {
 
 //// DELETE ////
 
-export function deleteUserBYUsername(username) {
+export function deleteUserByUsername(username) {
     const result = pool.query("UPDATE users SET isDelete = 1 WHERE username = ?",
         [username]
     );
