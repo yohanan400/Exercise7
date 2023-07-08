@@ -2,6 +2,7 @@ const Joi = require('joi');
 const express = require('express');
 
 const usersRouter = require('./users')
+const articlesRouter = require('./articles')
 //import {usersRouter} from "./users";
 
 
@@ -30,3 +31,4 @@ app.listen(port, ()=> console.log(`listening to ${port}..`));
 
 
 app.use('/users', usersRouter);
+app.use('/articles', articlesRouter);

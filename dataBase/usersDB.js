@@ -16,7 +16,7 @@ export function addUser(newUser) {
         [fullname, username, password, email]
     );
 
-    return result.insertid;
+        return result.insertid;
 }
 
 //// READ ////

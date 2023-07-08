@@ -21,6 +21,15 @@ export function getArticleByTitle({title}) {
     return rows;
 }
 
+export function getArticleById({id}) {
+    const result = pool.query("SELECT * FROM articles WHERE Id = ?", 
+        [id]
+    );
+
+    const [rows] = result;
+    return rows;
+}
+
 export function getArticlesByCategory({category}) {
     const result = pool.query("SELECT * FROM articles WHERE category = ?", 
         [category]
@@ -48,8 +57,14 @@ export function getArticles() {
 
 //// UPDATE ////
 
-export function updateArticleById({id, categoty, title, body, username}) {
-    const result = pool.query("UPDATE articles SET categoty = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
+export async function updateArticleById(newDetails) {
+
+    const oldDetails = await getArticleById(newDetails.articleId);
+
+    const {categoty, title, body, username, id} = {...oldDetails, ... newDetails};
+
+
+    const result = await pool.query("UPDATE articles SET categoty = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
         [categoty, title, body, username, id]
     );
 
@@ -58,9 +73,9 @@ export function updateArticleById({id, categoty, title, body, username}) {
 
 //// DELETE ////
 
-export function deleteArticleById({id}) {
+export function deleteArticleById({articleId}) {
     const result = pool.query("UPDATE articles SET isDelete = 1 WHERE Id = ?",
-        [id]
+        [articleId]
     );
 
     return result.affectedRows > 0
