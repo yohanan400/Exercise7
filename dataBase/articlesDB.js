@@ -13,7 +13,7 @@ export function addArticle({categoty, title, body, username}) {
 //// READ ////
 
 export function getArticleByTitle({title}) {
-    const result = pool.query("SELECT * FROM articles WHERE title = ?", 
+    const result = pool.query("SELECT * FROM articles WHERE title = ? AND isDelete = false", 
         [title]
     );
 
@@ -22,7 +22,7 @@ export function getArticleByTitle({title}) {
 }
 
 export function getArticleById({id}) {
-    const result = pool.query("SELECT * FROM articles WHERE Id = ?", 
+    const result = pool.query("SELECT * FROM articles WHERE Id = ? AND isDelete = false", 
         [id]
     );
 
@@ -31,7 +31,7 @@ export function getArticleById({id}) {
 }
 
 export function getArticlesByCategory({category}) {
-    const result = pool.query("SELECT * FROM articles WHERE category = ?", 
+    const result = pool.query("SELECT * FROM articles WHERE category = ? AND isDelete = false", 
         [category]
     );
 
@@ -40,7 +40,7 @@ export function getArticlesByCategory({category}) {
 }
 
 export function getArticlesByUsername({username}) {
-    const result = pool.query("SELECT * FROM articles WHERE username = ?", 
+    const result = pool.query("SELECT * FROM articles WHERE username = ? AND isDelete = false", 
         [username]
     );
 
@@ -49,7 +49,7 @@ export function getArticlesByUsername({username}) {
 }
 
 export function getArticles() {
-    const result = pool.query("SELECT * FROM articles");
+    const result = pool.query("SELECT * FROM articles AND isDelete = false");
 
     const [rows] = result;
     return rows;
