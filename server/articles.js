@@ -16,7 +16,7 @@ articlesRouter.get('/', async (req, res)=>{
     res.status(200).send(result);
 });
 
-articlesRouter.get('/:category', async(req, res)=>{
+articlesRouter.get('/byCategory/:category', async(req, res)=>{
     const result = await articlesDB.getArticlesByCategory(req.params);
 
     if (!result){
@@ -27,7 +27,7 @@ articlesRouter.get('/:category', async(req, res)=>{
     res.status(200).send(result);
 } );
 
-articlesRouter.get('/:title', async(req, res)=>{
+articlesRouter.get('/byTitle/:title', async(req, res)=>{
     const result = await articlesDB.getArticleByTitle(req.params);
 
     if (!result){
@@ -38,7 +38,7 @@ articlesRouter.get('/:title', async(req, res)=>{
     res.status(200).send(result);
 } );
 
-articlesRouter.get('/:username', async(req, res)=>{
+articlesRouter.get('/byUsername/:username', async(req, res)=>{
     const result = await articlesDB.getArticlesByUsername(req.params);
 
     if (!result){

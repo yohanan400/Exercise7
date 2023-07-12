@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 
-export function newArticleValidation(details){
+function newArticleValidation(details){
     const schema = Joi.object({
         username: Joi.string().required(),
         category: Joi.string().required(),
@@ -13,7 +13,7 @@ export function newArticleValidation(details){
 }
 
 
-export function updateArticleValidation(details){
+function updateArticleValidation(details){
     const schema = Joi.object({
         username: Joi.string().required(),
         category: Joi.string().required(),
@@ -22,4 +22,9 @@ export function updateArticleValidation(details){
     })
 
     return  schema.validate(details)
+}
+
+module.exports = {
+    newArticleValidation,
+    updateArticleValidation
 }

@@ -2,7 +2,7 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-export function addArticle({categoty, title, body, username}) {
+function addArticle({categoty, title, body, username}) {
     const result = pool.query("INSERT INTO articles (categoty, title, body, username) VALUES (?, ?, ?, ?)",
         [categoty, title, body, username]
     );
@@ -12,7 +12,7 @@ export function addArticle({categoty, title, body, username}) {
 
 //// READ ////
 
-export function getArticleByTitle({title}) {
+function getArticleByTitle({title}) {
     const result = pool.query("SELECT * FROM articles WHERE title = ? AND isDelete = false", 
         [title]
     );
@@ -21,7 +21,7 @@ export function getArticleByTitle({title}) {
     return rows;
 }
 
-export function getArticleById({id}) {
+function getArticleById({id}) {
     const result = pool.query("SELECT * FROM articles WHERE Id = ? AND isDelete = false", 
         [id]
     );
@@ -30,7 +30,7 @@ export function getArticleById({id}) {
     return rows;
 }
 
-export function getArticlesByCategory({category}) {
+function getArticlesByCategory({category}) {
     const result = pool.query("SELECT * FROM articles WHERE category = ? AND isDelete = false", 
         [category]
     );
@@ -39,7 +39,7 @@ export function getArticlesByCategory({category}) {
     return rows;
 }
 
-export function getArticlesByUsername({username}) {
+function getArticlesByUsername({username}) {
     const result = pool.query("SELECT * FROM articles WHERE username = ? AND isDelete = false", 
         [username]
     );
@@ -48,7 +48,7 @@ export function getArticlesByUsername({username}) {
     return rows;
 }
 
-export function getArticles() {
+function getArticles() {
     const result = pool.query("SELECT * FROM articles AND isDelete = false");
 
     const [rows] = result;
@@ -57,7 +57,7 @@ export function getArticles() {
 
 //// UPDATE ////
 
-export async function updateArticleById(newDetails) {
+async function updateArticleById(newDetails) {
 
     const oldDetails = await getArticleById(newDetails.articleId);
 
@@ -73,10 +73,21 @@ export async function updateArticleById(newDetails) {
 
 //// DELETE ////
 
-export function deleteArticleById({articleId}) {
+function deleteArticleById({articleId}) {
     const result = pool.query("UPDATE articles SET isDelete = 1 WHERE Id = ?",
         [articleId]
     );
 
     return result.affectedRows > 0
+}
+
+module.exports = {
+    addArticle,
+    getArticleByTitle,
+    getArticleById,
+    getArticlesByCategory,
+    getArticlesByUsername,
+    getArticles,
+    updateArticleById,
+    deleteArticleById
 }

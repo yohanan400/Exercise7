@@ -1,5 +1,5 @@
 const express = require('express');
-const validate = require('./validates/usersValifates');
+const validate = require('./validates/usersValidates');
 const usersDB = require('../dataBase/usersDB');
 
 const usersRouter = express.Router();

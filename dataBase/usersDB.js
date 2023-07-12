@@ -11,7 +11,7 @@ const { pool } = require('./connectionDB');
  * 
  * @returns userId
  */
-export function addUser(newUser) {
+function addUser(newUser) {
     const result = pool.query("INSERT INTO users (fullname, username, password, email) VALUES (?, ?, ?, ?)",
         [fullname, username, password, email]
     );
@@ -21,7 +21,7 @@ export function addUser(newUser) {
 
 //// READ ////
 
-export function getUserByUsername(username) {
+function getUserByUsername(username) {
     const result = pool.query("SELECT * DROM users WHERE username = ? AND isDelete = false",
         [username]
     );
@@ -31,7 +31,7 @@ export function getUserByUsername(username) {
 }
 
 // for username or password recovery
-export function getUserByEmail(email) {
+function getUserByEmail(email) {
     const result = pool.query("SELECT * DROM users WHERE email = ? AND isDelete = false",
         [email]
     );
@@ -40,7 +40,7 @@ export function getUserByEmail(email) {
     return rows;
 }
 
-export function getUsers() {
+function getUsers() {
     const result = pool.query("SELECT * FROM users  WHERE isDelete = false");
 
     const [rows] = result;
@@ -49,55 +49,55 @@ export function getUsers() {
 
 //// UPDATE ////
 
-export function updateUserPassword(username, password) {
-    const result = pool.query("UPDATE users SET password = ? WHERE username = ? ",
-        [password, username]
-    );
+// export function updateUserPassword(username, password) {
+//     const result = pool.query("UPDATE users SET password = ? WHERE username = ? ",
+//         [password, username]
+//     );
 
-    return result.affectedRows > 0
-}
+//     return result.affectedRows > 0
+// }
 
-export function updateUserEmail(username, email) {
-    const result = pool.query("UPDATE users SET email = ? WHERE username = ? ",
-        [email, username]
-    );
+// export function updateUserEmail(username, email) {
+//     const result = pool.query("UPDATE users SET email = ? WHERE username = ? ",
+//         [email, username]
+//     );
 
-    return result.affectedRows > 0
-}
+//     return result.affectedRows > 0
+// }
 
-export function updateUserFullname(username, fullname) {
-    const result = pool.query("UPDATE users SET full_name = ? WHERE username = ? ",
-        [fullname, username]
-    );
+// export function updateUserFullname(username, fullname) {
+//     const result = pool.query("UPDATE users SET full_name = ? WHERE username = ? ",
+//         [fullname, username]
+//     );
 
-    return result.affectedRows > 0
-}
+//     return result.affectedRows > 0
+// }
 
-export function updateUserProfileImage(username, imageUrl) {
-    const result = pool.query("UPDATE users SET profile_image_url = ? WHERE username = ? ",
-        [imageUrl, username]
-    );
+// export function updateUserProfileImage(username, imageUrl) {
+//     const result = pool.query("UPDATE users SET profile_image_url = ? WHERE username = ? ",
+//         [imageUrl, username]
+//     );
 
-    return result.affectedRows > 0
-}
+//     return result.affectedRows > 0
+// }
 
-export function updateUserAccesLevel(username, accessLevel) {
-    const result = pool.query("UPDATE users SET access_level_id = ? WHERE username = ? ",
-        [accessLevel, username]
-    );
+// export function updateUserAccesLevel(username, accessLevel) {
+//     const result = pool.query("UPDATE users SET access_level_id = ? WHERE username = ? ",
+//         [accessLevel, username]
+//     );
 
-    return result.affectedRows > 0
-}
+//     return result.affectedRows > 0
+// }
 
-export function updateUserRullId(username, ruleId) {
-    const result = pool.query("UPDATE users SET rule_id = ? WHERE username = ? ",
-        [ruleId, username]
-    );
+// export function updateUserRullId(username, ruleId) {
+//     const result = pool.query("UPDATE users SET rule_id = ? WHERE username = ? ",
+//         [ruleId, username]
+//     );
 
-    return result.affectedRows > 0
-}
+//     return result.affectedRows > 0
+// }
 
-export function updateUser(newUserDetailes) {
+function updateUser(newUserDetailes) {
 
     const oldUserDetailes = getUserByUsername(newUserDetailes.username);
 
@@ -113,10 +113,19 @@ export function updateUser(newUserDetailes) {
 
 //// DELETE ////
 
-export function deleteUserByUsername(username) {
+function deleteUserByUsername(username) {
     const result = pool.query("UPDATE users SET isDelete = 1 WHERE username = ?",
         [username]
     );
 
     return result.affectedRows > 0
+}
+
+module.exports = {
+    addUser,
+    getUserByUsername,
+    getUserByEmail,
+    getUsers,
+    updateUser,
+    deleteUserByUsername
 }

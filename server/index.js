@@ -1,13 +1,18 @@
 const Joi = require('joi');
 const express = require('express');
+const fileUpload = require('express-fileupload');
 
 const usersRouter = require('./users')
 const articlesRouter = require('./articles')
+const summeriesRouter = require('./summaries')
 //import {usersRouter} from "./users";
 
 
 const app = express();
 app.use(express.json());
+app.use(fileUpload());
+app.use(express.static('public'));
+
 
 
 /////// EXAMPLE //////////
@@ -32,3 +37,4 @@ app.listen(port, ()=> console.log(`listening to ${port}..`));
 
 app.use('/users', usersRouter);
 app.use('/articles', articlesRouter);
+app.use('/summeries', summeriesRouter);

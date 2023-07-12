@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 
-export function userLoginDetailsValidate(details){
+function userLoginDetailsValidate(details){
     const schema = Joi.object({
         username: Joi.string().required(),
         password: Joi.string().required()
@@ -10,7 +10,7 @@ export function userLoginDetailsValidate(details){
     return  schema.validate(details)
 }
 
-export function userRegisterDetailsValidate(details){
+function userRegisterDetailsValidate(details){
     const schema = {
         fullname : Joi.string().required(),
         username : Joi.string().min(3).max(45).required(),
@@ -21,7 +21,7 @@ export function userRegisterDetailsValidate(details){
     return  schema.validate(details)
 }
 
-export function userUpdateDetailsValidate(details){
+function userUpdateDetailsValidate(details){
     const schema = {
         fullname : Joi.string().required(),
         password : Joi.string().min(8).max(16).required(),
@@ -30,3 +30,7 @@ export function userUpdateDetailsValidate(details){
 
     return  schema.validate(details)
 }
+
+module.exports += userLoginDetailsValidate;
+module.exports += userRegisterDetailsValidate;
+module.exports += userUpdateDetailsValidate;
