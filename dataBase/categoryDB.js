@@ -2,7 +2,7 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-export function addCategory({category_name}) {
+function addCategory({category_name}) {
     const result = pool.query("INSERT INTO category (category_name) VALUES (?)",
         [category_name]
     );
@@ -12,7 +12,7 @@ export function addCategory({category_name}) {
 
 //// READ ////
 
-export function getCategoryById({id}) {
+function getCategoryById({id}) {
     const result = pool.query("SELECT * FROM category Where id = ?", 
     [id]
     );
@@ -21,7 +21,7 @@ export function getCategoryById({id}) {
     return rows;
 }
 
-export function getCategories() {
+function getCategories() {
     const result = pool.query("SELECT * FROM category");
 
     const [rows] = result;
@@ -30,7 +30,7 @@ export function getCategories() {
 
 //// UPDATE ////
 
-export function updateCategoryById({category_name, id}) {
+function updateCategoryById({category_name, id}) {
     const result = pool.query("UPDATE category SET category_name = ? WHERE Id = ? ",
         [category_name, id]
     );
@@ -40,10 +40,18 @@ export function updateCategoryById({category_name, id}) {
 
 //// DELETE ////
 
-export function deleteCategory({id}) {
+function deleteCategory({id}) {
     const result = pool.query("UPDATE category SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
     return result.affectedRows > 0
+}
+
+module.exports = {
+    addCategory,
+    getCategoryById,
+    getCategories,
+    updateCategoryById,
+    deleteCategory
 }

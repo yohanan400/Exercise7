@@ -2,7 +2,7 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-export function addCluster({categoty, cluster_name, supervisor_user}) {
+function addCluster({categoty, cluster_name, supervisor_user}) {
     const result = pool.query("INSERT INTO clusters (categoty, cluster_name, supervisor_user) VALUES (?, ?, ?)",
         [categoty, cluster_name, supervisor_user]
     );
@@ -12,7 +12,7 @@ export function addCluster({categoty, cluster_name, supervisor_user}) {
 
 //// READ ////
 
-export function getClustersByCategory({category}) {
+function getClustersByCategory({category}) {
     const result = pool.query("SELECT * FROM clusters WHERE category = ?", 
         [category]
     );
@@ -21,7 +21,7 @@ export function getClustersByCategory({category}) {
     return rows;
 }
 
-export function getClusterByUsername({username}) {
+function getClusterByUsername({username}) {
     const result = pool.query("SELECT * FROM clusters WHERE username = ?", 
         [username]
     );
@@ -30,7 +30,7 @@ export function getClusterByUsername({username}) {
     return rows;
 }
 
-export function getClusters() {
+function getClusters() {
     const result = pool.query("SELECT * FROM clusters");
 
     const [rows] = result;
@@ -39,7 +39,7 @@ export function getClusters() {
 
 //// UPDATE ////
 
-export function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
+function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
     const result = pool.query("UPDATE clusters SET categoty = ?, cluster_name = ?, supervisor_user = ?, username = ? WHERE Id = ? ",
         [categoty, cluster_name, supervisor_user, username, id]
     );
@@ -49,10 +49,19 @@ export function updateClusterById({id, categoty, cluster_name, supervisor_user})
 
 //// DELETE ////
 
-export function deleteClusterById({id}) {
+function deleteClusterById({id}) {
     const result = pool.query("UPDATE clusters SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
     return result.affectedRows > 0
+}
+
+module.exports = {
+    addCluster,
+    getClustersByCategory,
+    getClusterByUsername,
+    getClusters,
+    updateClusterById,
+    deleteClusterById    
 }

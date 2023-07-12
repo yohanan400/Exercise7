@@ -2,7 +2,7 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-export function addPost({Id, title, body, username}) {
+function addPost({Id, title, body, username}) {
     const result = pool.query("INSERT INTO posts (Id, title, body, username) VALUES (?, ?, ?, ?)",
         [Id, title, body, username]
     );
@@ -12,7 +12,7 @@ export function addPost({Id, title, body, username}) {
 
 //// READ ////
 
-export function getPosts() {
+function getPosts() {
     const result = pool.query("SELECT * FROM posts");
 
     const [rows] = result;
@@ -21,7 +21,7 @@ export function getPosts() {
 
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
-export function updatePostById({id, title, body, username}) {
+function updatePostById({id, title, body, username}) {
     const result = pool.query("UPDATE posts SET title = ?, body = ?, username = ? WHERE Id = ? ",
         [title, body, username, id]
     );
@@ -31,10 +31,17 @@ export function updatePostById({id, title, body, username}) {
 
 //// DELETE ////
 
-export function deletePostById({id}) {
+function deletePostById({id}) {
     const result = pool.query("UPDATE posts SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
     return result.affectedRows > 0
+}
+
+module.exports = {
+    addPost,
+    getPosts,
+    updatePostById,
+    deletePostById
 }
