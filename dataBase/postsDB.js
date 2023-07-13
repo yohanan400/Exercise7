@@ -26,6 +26,25 @@ function getLimmitedPosts(limit, offset = 0) {
     return rows;
 }
 
+function getPostById({id}) {
+    const result = pool.query("SELECT * DROM posts WHERE id = ? AND isDelete = false",
+        [id]
+    );
+
+    const [rows] = result;
+    return rows;
+}
+
+function getPostsByUsername({username}) {
+    const result = pool.query("SELECT * FROM posts WHERE username = ? AND isDelete = false",
+        [username]
+    );
+
+    const [rows] = result;
+    return rows;
+}
+
+
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
 function updatePostById({id, title, body, username}) {
@@ -50,6 +69,8 @@ module.exports = {
     addPost,
     getPosts,
     getLimmitedPosts,
+    getPostById,
+    getPostsByUsername,
     updatePostById,
     deletePostById
 }

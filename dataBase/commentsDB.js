@@ -26,6 +26,13 @@ function getLimmitedComments(limit, offset = 0) {
     return rows;
 }
 
+function getCommentsByUsername({username}) {
+    const result = pool.query("SELECT * FROM comments WHERE username = ? AND isDelete = 0", [username]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
 function updateCommentById({id, postId, title, body, username}) {
@@ -50,6 +57,7 @@ module.exports = {
     addComment,
     getComments,
     getLimmitedComments,
+    getCommentsByUsername,
     updateCommentById,
     deleteCommentById
 }

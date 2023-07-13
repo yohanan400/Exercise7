@@ -79,7 +79,7 @@ videosRouter.put('/:id/update', async (req, res)=>{
         return;
     }
 
-    res.status(200).send("summary successfully updated");
+    res.status(200).send(result);
 } );
 
 // //// DELETE ////

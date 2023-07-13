@@ -22,7 +22,7 @@ function addUser(newUser) {
 //// READ ////
 
 function getUserByUsername(username) {
-    const result = pool.query("SELECT * DROM users WHERE username = ? AND isDelete = false",
+    const result = pool.query("SELECT * FROM users WHERE username = ? AND isDelete = false",
         [username]
     );
 
@@ -32,7 +32,7 @@ function getUserByUsername(username) {
 
 // for username or password recovery
 function getUserByEmail(email) {
-    const result = pool.query("SELECT * DROM users WHERE email = ? AND isDelete = false",
+    const result = pool.query("SELECT * FROM users WHERE email = ? AND isDelete = false",
         [email]
     );
 
