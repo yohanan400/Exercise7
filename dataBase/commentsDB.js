@@ -19,6 +19,13 @@ function getComments() {
     return rows;
 }
 
+function getLimmitedComments(limit, offset = 0) {
+    const result = pool.query("SELECT * FROM comments LIMIT = ? OFFSET = ?", [limit, offset]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
 function updateCommentById({id, postId, title, body, username}) {
@@ -42,6 +49,7 @@ function deleteCommentById({id}) {
 module.exports = {
     addComment,
     getComments,
+    getLimmitedComments,
     updateCommentById,
     deleteCommentById
 }

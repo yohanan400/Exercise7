@@ -55,6 +55,13 @@ function getArticles() {
     return rows;
 }
 
+function getLimmitedArticles(limit, offset = 0) {
+    const result = pool.query("SELECT * FROM articles LIMIT = ? OFFSET = ?", [limit, offset]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 
 async function updateArticleById(newDetails) {
@@ -88,6 +95,7 @@ module.exports = {
     getArticlesByCategory,
     getArticlesByUsername,
     getArticles,
+    getLimmitedArticles,
     updateArticleById,
     deleteArticleById
 }

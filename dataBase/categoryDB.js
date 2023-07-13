@@ -28,6 +28,13 @@ function getCategories() {
     return rows;
 }
 
+function getLimmitedCategories(limit, offset = 0) {
+    const result = pool.query("SELECT * FROM categories LIMIT = ? OFFSET = ?", [limit, offset]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 
 function updateCategoryById({category_name, id}) {
@@ -52,6 +59,7 @@ module.exports = {
     addCategory,
     getCategoryById,
     getCategories,
+    getLimmitedCategories,
     updateCategoryById,
     deleteCategory
 }

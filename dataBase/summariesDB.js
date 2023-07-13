@@ -6,7 +6,7 @@ const pool = require('./connectionDB');
 
     const result = pool.query(` INSERT INTO summaries (category, title, username, path)
                                 values (?, ?, ?, ?)`,
-        [category, title, username]
+        [category, title, username, path]
     );
 
     return result.insertid;

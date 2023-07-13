@@ -28,6 +28,13 @@ function getRoles() {
     return rows;
 }
 
+function getLimmitedRoles(limit, offset = 0) {
+    const result = pool.query("SELECT * FROM roles LIMIT = ? OFFSET = ?", [limit, offset]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 
 function updateRoleById({role_title, id}) {
@@ -52,6 +59,7 @@ module.exports = {
     addRole,
     getRoleById,
     getRoles,
+    getLimmitedRoles,
     updateRoleById,
     deleteCategory
 }

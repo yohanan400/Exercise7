@@ -37,6 +37,13 @@ function getClusters() {
     return rows;
 }
 
+function getLimmitedClusters(limit, offset = 0) {
+    const result = pool.query("SELECT * FROM clusters LIMIT = ? OFFSET = ?", [limit, offset]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 
 function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
@@ -62,6 +69,7 @@ module.exports = {
     getClustersByCategory,
     getClusterByUsername,
     getClusters,
+    getLimmitedClusters,
     updateClusterById,
     deleteClusterById    
 }

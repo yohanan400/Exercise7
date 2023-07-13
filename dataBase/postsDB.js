@@ -19,6 +19,13 @@ function getPosts() {
     return rows;
 }
 
+function getLimmitedPosts(limit, offset = 0) {
+    const result = pool.query("SELECT * FROM posts LIMIT = ? OFFSET = ?", [limit, offset]);
+
+    const [rows] = result;
+    return rows;
+}
+
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
 function updatePostById({id, title, body, username}) {
@@ -42,6 +49,7 @@ function deletePostById({id}) {
 module.exports = {
     addPost,
     getPosts,
+    getLimmitedPosts,
     updatePostById,
     deletePostById
 }
