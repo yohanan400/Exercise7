@@ -2,3 +2,4 @@
 server/node_modules/*
 server/node_modules
 server/firebase.js
+client/node_modules

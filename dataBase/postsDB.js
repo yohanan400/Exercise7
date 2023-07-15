@@ -27,7 +27,7 @@ function getLimmitedPosts(limit, offset = 0) {
 }
 
 function getPostById({id}) {
-    const result = pool.query("SELECT * DROM posts WHERE id = ? AND isDelete = false",
+    const result = pool.query("SELECT * FROM posts WHERE id = ? AND isDelete = false",
         [id]
     );
 
