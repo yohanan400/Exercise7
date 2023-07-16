@@ -9,7 +9,7 @@ videosRouter.get('/', async (req, res)=>{
 
     let result; 
     
-    if(req.query){
+    if(req.query.limit){
         result = await videosDB.getLimmitedVideos(req.query.limit, req.query.offset);
     }
     else{

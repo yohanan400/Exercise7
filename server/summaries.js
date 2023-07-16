@@ -11,7 +11,7 @@ summeriesRouter.get('/', async (req, res)=>{
 
     let result; 
     
-    if(req.query){
+    if(req.query.limit){
         result = await summariesDB.getLimmitedSummaries(req.query.limit, req.query.offset);
     }
     else{

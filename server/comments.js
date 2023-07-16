@@ -9,7 +9,7 @@ commentsRouter.get('/', async (req, res) => {
 
     let result;
 
-    if (req.query) {
+    if (req.query.limit) {
         result = await commentsDB.getLimmitedComments(req.query.limit, req.query.offset);
     }
     else {

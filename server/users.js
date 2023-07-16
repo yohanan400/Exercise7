@@ -5,9 +5,39 @@ const usersDB = require('../dataBase/usersDB');
 const usersRouter = express.Router();
 
 //// GET ////
-
-usersRouter.get('/login', async (req, res)=>{
+usersRouter.get('/:username/info', async (req, res)=>{
     
+    const result = await usersDB.getUserByUsername(req.params);
+    
+    if(!result){
+        res.status(400).send("username or password incorrect");
+        return;
+    }
+    
+    res.status(200).send(result);
+});
+
+usersRouter.get('/:username/all', async (req, res)=>{
+    
+    const userDetailes = usersDB.getUserByUsername(req.params);
+    
+    if(userDetailes.access_level_id != 1){
+        res.status(403).send(`${req.params.username} does not have access for this action.`);
+        return;
+    }
+    
+    const result = await usersDB.getUsers(req.params);
+    
+    if(!result){
+        res.status(400).send("something went wrong, please try again");
+        return;
+    }
+    
+    res.status(200).send(result);
+});
+
+//// POST ////
+usersRouter.post('/login', async (req, res)=>{
    const { error, value } =  validate.userLoginDetailsValidate(req.body)
 
     if(error){
@@ -21,15 +51,8 @@ usersRouter.get('/login', async (req, res)=>{
         res.status(400).send("username or password incorrect");
         return;
     }
-
-    res.status(200).send(result);
-});
-
-usersRouter.get('/:username', async (req, res)=>{
-
-    const result = await usersDB.getUserByUsername(req.params);
-
-    if(!result){
+    
+    if(result[0].password != req.body.password){
         res.status(400).send("username or password incorrect");
         return;
     }
@@ -37,27 +60,7 @@ usersRouter.get('/:username', async (req, res)=>{
     res.status(200).send(result);
 });
 
-usersRouter.get('/:username/all', async (req, res)=>{
-
-    const userDetailes = usersDB.getUserByUsername(req.params);
-
-    if(userDetailes.access_level_id != 1){
-        res.status(403).send(`${req.params.username} does not have access for this action.`);
-        return;
-    }
-
-    const result = await usersDB.getUsers(req.params);
-
-    if(!result){
-        res.status(400).send("something went wrong, please try again");
-        return;
-    }
-
-    res.status(200).send(result);
-});
-
-//// POST ////
-usersRouter.post('/register', async (req, res)=>{
+usersRouter.post('/register/new', async (req, res)=>{
  
     const {error, value} = validate.userRegisterDetailsValidate(req.body);
 
@@ -73,7 +76,7 @@ usersRouter.post('/register', async (req, res)=>{
         return;
     }
 
-    res.status(201).send(result);
+    res.status(201).send(result.toString());
 });
 
 //// PUT ////
@@ -86,7 +89,9 @@ usersRouter.put('/:username/update', async (req, res)=>{
         return;
     }
 
-    const result = await usersDB.updateUser(req.body);
+
+    const newDetaild = {...req.body, ...req.params}
+    const result = await usersDB.updateUser(newDetaild);
 
     if(!result){
         res.status(400).send("something went wrong, please try again");

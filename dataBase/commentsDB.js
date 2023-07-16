@@ -2,55 +2,52 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-function addComment({postId, title, body, username}) {
-    const result = pool.query("INSERT INTO comments (postId, title, body, username) VALUES (?, ?, ?, ?)",
+async function addComment({postId, title, body, username}) {
+    const result = await pool.query("INSERT INTO comments (postId, title, body, username) VALUES (?, ?, ?, ?)",
         [postId, title, body, username]
     );
 
-    return result.insertid;
+    return result[0].insertid;
 }
 
 //// READ ////
 
-function getComments() {
-    const result = pool.query("SELECT * FROM comments");
+async function getComments() {
+    const result = await pool.query("SELECT * FROM comments");
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getLimmitedComments(limit, offset = 0) {
-    const result = pool.query("SELECT * FROM comments LIMIT = ? OFFSET = ?", [limit, offset]);
+async function getLimmitedComments({limit, offset = 0}) {
+    const result = await pool.query("SELECT * FROM comments LIMIT = ? OFFSET = ?", [limit, offset]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getCommentsByUsername({username}) {
-    const result = pool.query("SELECT * FROM comments WHERE username = ? AND isDelete = 0", [username]);
+async function getCommentsByUsername({username}) {
+    const result = await pool.query("SELECT * FROM comments WHERE username = ? AND isDelete = 0", [username]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
-function updateCommentById({id, postId, title, body, username}) {
-    const result = pool.query("UPDATE comments SET postId = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
+async function updateCommentById({id, postId, title, body, username}) {
+    const result = await pool.query("UPDATE comments SET postId = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
         [postId, title, body, username, id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 //// DELETE ////
 
-function deleteCommentById({id}) {
-    const result = pool.query("UPDATE comments SET isDelete = 1 WHERE Id = ?",
+async function deleteCommentById({id}) {
+    const result = await pool.query("UPDATE comments SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 module.exports = {

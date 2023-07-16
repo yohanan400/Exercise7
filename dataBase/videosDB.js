@@ -2,62 +2,58 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-function addVideo({Id, username, category, path}) {
-    const result = pool.query("INSERT INTO videos (Id, username, category, path) VALUES (?, ?, ?, ?)",
+async function addVideo({Id, username, category, path}) {
+    const result = await pool.query("INSERT INTO videos (Id, username, category, path) VALUES (?, ?, ?, ?)",
         [Id, username, category, path]
     );
 
-    return result.insertid;
+    return result[0].insertid;
 }
 
 //// READ ////
 
-function getVideoByUsername({username}) {
-    const result = pool.query("SELECT * FROM videos WHERE username = ?", [username]);
+async function getVideoByUsername({username}) {
+    const result = await pool.query("SELECT * FROM videos WHERE username = ?", [username]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getVideoByCategory({category}) {
-    const result = pool.query("SELECT * FROM videos WHERE category = ?", [category]);
+async function getVideoByCategory({category}) {
+    const result = await pool.query("SELECT * FROM videos WHERE category = ?", [category]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getVideos() {
-    const result = pool.query("SELECT * FROM videos");
+async function getVideos() {
+    const result = await pool.query("SELECT * FROM videos");
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getLimmitedVideos(limit, offset = 0) {
-    const result = pool.query("SELECT * FROM videos LIMIT = ? OFFSET = ?", [limit, offset]);
+async function getLimmitedVideos({limit, offset = 0}) {
+    const result = await pool.query("SELECT * FROM videos LIMIT = ? OFFSET = ?", [limit, offset]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
-function updateVideoById({id, username, category, path}) {
-    const result = pool.query("UPDATE posts SET category = ?, path = ?, username = ? WHERE Id = ? ",
+async function updateVideoById({id, username, category, path}) {
+    const result = await pool.query("UPDATE posts SET category = ?, path = ?, username = ? WHERE Id = ? ",
         [category, username, path, id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 //// DELETE ////
 
-function deleteVideoById({id}) {
-    const result = pool.query("UPDATE videos SET isDelete = 1 WHERE Id = ?",
+async function deleteVideoById({id}) {
+    const result = await pool.query("UPDATE videos SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 module.exports = {

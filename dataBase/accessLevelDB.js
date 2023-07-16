@@ -2,41 +2,40 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-function addAccessLevel(accessType) {
-    const result = pool.query("INSERT INTO access_level (access_type) VALUES (?)",
+async function addAccessLevel({accessType}) {
+    const result = await pool.query("INSERT INTO access_level (access_type) VALUES (?)",
         [accessType]
     );
 
-    return result.insertid;
+    return result[0].insertid;
 }
 
 //// READ ////
 
-function getAllAccessLevels() {
-    const result = pool.query("SELECT * FROM access_level");
+async function getAllAccessLevels() {
+    const result = await pool.query("SELECT * FROM access_level");
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 //// UPDATE ////
 
-function updateAccessLevelById(access_type, id) {
-    const result = pool.query("UPDATE access_level SET access_type = ? WHERE Id = ? ",
+async function updateAccessLevelById({access_type, id}) {
+    const result = await pool.query("UPDATE access_level SET access_type = ? WHERE Id = ? ",
         [access_type, id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 //// DELETE ////
 
-function deleteAccessLevel(id) {
-    const result = pool.query("UPDATE access_level SET isDelete = 1 WHERE Id = ?",
+async function deleteAccessLevel({id}) {
+    const result = await pool.query("UPDATE access_level SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 module.exports = {

@@ -7,7 +7,7 @@ function addCluster({categoty, cluster_name, supervisor_user}) {
         [categoty, cluster_name, supervisor_user]
     );
 
-    return result.insertid;
+    return result[0].insertid;
 }
 
 //// READ ////
@@ -17,8 +17,7 @@ function getClustersByCategory({category}) {
         [category]
     );
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 function getClusterByUsername({username}) {
@@ -26,22 +25,19 @@ function getClusterByUsername({username}) {
         [username]
     );
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getClusters() {
-    const result = pool.query("SELECT * FROM clusters");
+async function getClusters() {
+    const result = await pool.query("SELECT * FROM clusters");
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getLimmitedClusters(limit, offset = 0) {
+function getLimmitedClusters({limit, offset = 0}) {
     const result = pool.query("SELECT * FROM clusters LIMIT = ? OFFSET = ?", [limit, offset]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 //// UPDATE ////
@@ -51,7 +47,7 @@ function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
         [categoty, cluster_name, supervisor_user, username, id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 //// DELETE ////
@@ -61,7 +57,7 @@ function deleteClusterById({id}) {
         [id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 module.exports = {

@@ -9,7 +9,7 @@ postsRouter.get('/', async (req, res)=>{
 
     let result; 
     
-    if(req.query){
+    if(req.query.limit){
         result = await postsDB.getLimmitedPosts(req.query.limit, req.query.offset);
     }
     else{

@@ -7,15 +7,17 @@ const clustersRouter = express.Router();
 //// GET ////
 clustersRouter.get('/', async (req, res)=>{
 
-    let result; 
+    var result; 
     
-    if(req.query){
+    if(req.query.limit){
         result = await clustersDB.getLimmitedClusters(req.query.limit, req.query.offset);
     }
     else{
         result = await clustersDB.getClusters();
+
     }
     
+
     if (!result){
         res.status(400).send("something went worng, please try again.");
         return;

@@ -2,67 +2,63 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-function addPost({Id, title, body, username}) {
-    const result = pool.query("INSERT INTO posts (Id, title, body, username) VALUES (?, ?, ?, ?)",
+async function addPost({Id, title, body, username}) {
+    const result = await pool.query("INSERT INTO posts (Id, title, body, username) VALUES (?, ?, ?, ?)",
         [Id, title, body, username]
     );
 
-    return result.insertid;
+    return result[0].insertid;
 }
 
 //// READ ////
 
-function getPosts() {
-    const result = pool.query("SELECT * FROM posts");
+async function getPosts() {
+    const result = await pool.query("SELECT * FROM posts");
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getLimmitedPosts(limit, offset = 0) {
-    const result = pool.query("SELECT * FROM posts LIMIT = ? OFFSET = ?", [limit, offset]);
+async function getLimmitedPosts({limit, offset = 0}) {
+    const result = await pool.query("SELECT * FROM posts LIMIT = ? OFFSET = ?", [limit, offset]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getPostById({id}) {
-    const result = pool.query("SELECT * FROM posts WHERE id = ? AND isDelete = false",
+async function getPostById({id}) {
+    const result = await pool.query("SELECT * FROM posts WHERE id = ? AND isDelete = false",
         [id]
     );
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getPostsByUsername({username}) {
-    const result = pool.query("SELECT * FROM posts WHERE username = ? AND isDelete = false",
+async function getPostsByUsername({username}) {
+    const result = await pool.query("SELECT * FROM posts WHERE username = ? AND isDelete = false",
         [username]
     );
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
-function updatePostById({id, title, body, username}) {
-    const result = pool.query("UPDATE posts SET title = ?, body = ?, username = ? WHERE Id = ? ",
+async function updatePostById({id, title, body, username}) {
+    const result = await pool.query("UPDATE posts SET title = ?, body = ?, username = ? WHERE Id = ? ",
         [title, body, username, id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 //// DELETE ////
 
-function deletePostById({id}) {
-    const result = pool.query("UPDATE posts SET isDelete = 1 WHERE Id = ?",
+async function deletePostById({id}) {
+    const result = await pool.query("UPDATE posts SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 module.exports = {

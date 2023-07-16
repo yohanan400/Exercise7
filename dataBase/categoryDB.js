@@ -2,57 +2,54 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-function addCategory({category_name}) {
-    const result = pool.query("INSERT INTO category (category_name) VALUES (?)",
+async function addCategory({category_name}) {
+    const result = await pool.query("INSERT INTO category (category_name) VALUES (?)",
         [category_name]
     );
 
-    return result.insertid;
+    return result[0].insertid;
 }
 
 //// READ ////
 
-function getCategoryById({id}) {
-    const result = pool.query("SELECT * FROM category Where id = ?", 
+async function getCategoryById({id}) {
+    const result = await pool.query("SELECT * FROM category Where id = ?", 
     [id]
     );
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getCategories() {
-    const result = pool.query("SELECT * FROM category");
+async function getCategories() {
+    const result = await pool.query("SELECT * FROM category");
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
-function getLimmitedCategories(limit, offset = 0) {
-    const result = pool.query("SELECT * FROM categories LIMIT = ? OFFSET = ?", [limit, offset]);
+async function getLimmitedCategories({limit, offset = 0}) {
+    const result = await pool.query("SELECT * FROM categories LIMIT = ? OFFSET = ?", [limit, offset]);
 
-    const [rows] = result;
-    return rows;
+    return result[0];
 }
 
 //// UPDATE ////
 
-function updateCategoryById({category_name, id}) {
-    const result = pool.query("UPDATE category SET category_name = ? WHERE Id = ? ",
+async function updateCategoryById({category_name, id}) {
+    const result = await pool.query("UPDATE category SET category_name = ? WHERE Id = ? ",
         [category_name, id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 //// DELETE ////
 
-function deleteCategory({id}) {
-    const result = pool.query("UPDATE category SET isDelete = 1 WHERE Id = ?",
+async function deleteCategory({id}) {
+    const result = await pool.query("UPDATE category SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
-    return result.affectedRows > 0
+    return result[0].affectedRows > 0
 }
 
 module.exports = {
