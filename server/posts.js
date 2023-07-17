@@ -35,7 +35,7 @@ postsRouter.get('/:id', async (req, res)=>{
     res.status(200).send(result);
 });
 
-postsRouter.get('/:username/all', async (req, res)=>{
+postsRouter.get('/all/:username', async (req, res)=>{
     const result = await postsDB.getPostsByUsername(req.params);
 
     if(!result){
@@ -47,7 +47,7 @@ postsRouter.get('/:username/all', async (req, res)=>{
 });
 
 //// POST ////
-postsRouter.post('/new/newPost', async (req, res)=>{
+postsRouter.post('/newPost', async (req, res)=>{
     const {error, value} = validate.newPostValidation(req.body);
 
     if(!error){
@@ -66,7 +66,7 @@ postsRouter.post('/new/newPost', async (req, res)=>{
 });
 
 // //// PUT ////
-postsRouter.put('/:id/update', async (req, res)=>{
+postsRouter.put('/update/:id', async (req, res)=>{
     const {error, value} = validate.updatePostValidation(req.body);
 
     if(!error){
@@ -74,7 +74,8 @@ postsRouter.put('/:id/update', async (req, res)=>{
         return;
     }
 
-    const result = await postsDB.updatePostById(req.params, req.body);
+    const newDetaild = {...req.body, ...req.params}
+    const result = await postsDB.updatePostById(newDetaild);
 
 
     if (!result) {
@@ -86,7 +87,7 @@ postsRouter.put('/:id/update', async (req, res)=>{
 } );
 
 // //// DELETE ////
-postsRouter.delete('/:id/delete', async (req, res)=>{
+postsRouter.delete('/delete/:id', async (req, res)=>{
     
     const result = await postsDB.deletePostById(req.params);
 

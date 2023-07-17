@@ -24,6 +24,12 @@ async function getVideoByCategory({category}) {
     return result[0];
 }
 
+async function getVideoById({id}) {
+    const result = await pool.query("SELECT * FROM videos WHERE Id = ?", [id]);
+
+    return result[0];
+}
+
 async function getVideos() {
     const result = await pool.query("SELECT * FROM videos");
 
@@ -39,6 +45,10 @@ async function getLimmitedVideos({limit, offset = 0}) {
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
 async function updateVideoById({id, username, category, path}) {
+
+    const oldDetails = await getVideoById(newDetails.articleId);
+    const {category, username, path, id} = {...oldDetails, ... newDetails};
+   
     const result = await pool.query("UPDATE posts SET category = ?, path = ?, username = ? WHERE Id = ? ",
         [category, username, path, id]
     );
@@ -60,6 +70,7 @@ module.exports = {
     addVideo,
     getVideoByUsername,
     getVideoByCategory,
+    getVideoById,
     getVideos,
     getLimmitedVideos,
     updateVideoById,

@@ -27,7 +27,7 @@ clustersRouter.get('/', async (req, res)=>{
 });
 
 //// POST ////
-clustersRouter.post('/new/newCluster', async (req, res)=>{
+clustersRouter.post('/newCluster', async (req, res)=>{
     const {error, value} = validate.newClusterValidation(req.body);
 
     if(!error){
@@ -46,7 +46,7 @@ clustersRouter.post('/new/newCluster', async (req, res)=>{
 });
 
 // //// PUT ////
-clustersRouter.put('/:id/update', async (req, res)=>{
+clustersRouter.put('/update/:id', async (req, res)=>{
     const {error, value} = validate.updateClusterValidation(req.body);
 
     if(!error){
@@ -54,7 +54,8 @@ clustersRouter.put('/:id/update', async (req, res)=>{
         return;
     }
 
-    const result = await clustersDB.updateClusterById(req.params, req.body);
+    const newDetaild = {...req.body, ...req.params}
+    const result = await clustersDB.updateClusterById(newDetaild);
 
 
     if (!result) {
@@ -66,7 +67,7 @@ clustersRouter.put('/:id/update', async (req, res)=>{
 } );
 
 // //// DELETE ////
-clustersRouter.delete('/:id/delete', async (req, res)=>{
+clustersRouter.delete('/delete/:id', async (req, res)=>{
     
     const result = await clustersDB.deleteClusterById(req.params);
 

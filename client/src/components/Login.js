@@ -7,24 +7,21 @@ export default function Login() {
     // React States
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [userData, setuserData] = useState([]);
 
-    async function handleSubmit(event){
+    async function handleSubmit(event) {
         //Prevent page reload
         event.preventDefault();
-
         var { uname, pass } = document.forms[0];
-
+        
         // Find user login info
-        const userData = await fetch("http://localhost:3001/users/login", {
-        method: "POST",
-        body: {
-                username: uname, password: pass}
-            }
-                )
-
+        setuserData( (await fetch("http://localhost:3001/users/admin/all")).json());
         console.log(userData);
-       
-    };
+        if (userData) {
+            setIsSubmitted(true);
+        }
+
+    }
 
     // Generate JSX code for error message
     const renderErrorMessage = (name) =>
@@ -58,7 +55,7 @@ export default function Login() {
             <div className="login-form">
                 <div className="title">Sign In</div>
                 {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
-                <button onClick={()=> setIsSubmitted(false)}>log out</button>
+                <button onClick={() => setIsSubmitted(false)}>log out</button>
             </div>
         </div>
     );

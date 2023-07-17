@@ -60,12 +60,10 @@ async function getLimmitedArticles({limit, offset = 0}) {
 
 async function updateArticleById(newDetails) {
 
-    const oldDetails = await getArticleById(newDetails.articleId);
-
+    const oldDetails = await getArticleById(newDetails.id);
     const {categoty, title, body, username, id} = {...oldDetails, ... newDetails};
 
-
-    const result = await await pool.query("UPDATE articles SET categoty = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
+    const result = await pool.query("UPDATE articles SET categoty = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
         [categoty, title, body, username, id]
     );
 
@@ -74,9 +72,9 @@ async function updateArticleById(newDetails) {
 
 //// DELETE ////
 
-async function deleteArticleById({articleId}) {
+async function deleteArticleById({id}) {
     const result = await pool.query("UPDATE articles SET isDelete = 1 WHERE Id = ?",
-        [articleId]
+        [id]
     );
 
     return result[0].affectedRows > 0

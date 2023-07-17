@@ -69,7 +69,7 @@ articlesRouter.post('/newArticle', async (req, res)=>{
 });
 
 //// PUT ////
-articlesRouter.put('/:articleId/update', async (req, res)=>{
+articlesRouter.put('/update/:id', async (req, res)=>{
     const {error, value} = validate.updateArticleValidation(req.body);
 
     if(!error){
@@ -77,7 +77,8 @@ articlesRouter.put('/:articleId/update', async (req, res)=>{
         return;
     }
 
-    const result = await articlesDB.updateArticleById(req.params, req.body);
+    const newDetaild = {...req.body, ...req.params}
+    const result = await articlesDB.updateArticleById(newDetaild);
 
     if (!result) {
         res.status(400).send("something went wrong, please try again");
@@ -88,7 +89,7 @@ articlesRouter.put('/:articleId/update', async (req, res)=>{
 } );
 
 //// DELETE ////
-articlesRouter.delete('/:articleId/delete', async (req, res)=>{
+articlesRouter.delete('/delete/:id', async (req, res)=>{
     
     const result = await articlesDB.deleteArticleById(req.params);
 
@@ -98,7 +99,6 @@ articlesRouter.delete('/:articleId/delete', async (req, res)=>{
     }
 
     res.status(200).send(result);
-
 });
 
 module.exports = articlesRouter;

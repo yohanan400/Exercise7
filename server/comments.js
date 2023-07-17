@@ -24,7 +24,7 @@ commentsRouter.get('/', async (req, res) => {
     res.status(200).send(result);
 });
 
-commentsRouter.get('/:username/all', async (req, res) => {
+commentsRouter.get('/all/:username', async (req, res) => {
 
     const result = await commentsDB.getCommentsByUsername(req.params);
 
@@ -37,7 +37,7 @@ commentsRouter.get('/:username/all', async (req, res) => {
 });
 
 //// POST ////
-commentsRouter.post('/new/newCluster', async (req, res) => {
+commentsRouter.post('/newCluster', async (req, res) => {
     const { error, value } = validate.newcommentValidation(req.body);
 
     if (!error) {
@@ -56,7 +56,7 @@ commentsRouter.post('/new/newCluster', async (req, res) => {
 });
 
 // //// PUT ////
-commentsRouter.put('/:id/update', async (req, res) => {
+commentsRouter.put('/update/:id', async (req, res) => {
     const { error, value } = validate.updatecommentValidation(req.body);
 
     if (!error) {
@@ -64,7 +64,8 @@ commentsRouter.put('/:id/update', async (req, res) => {
         return;
     }
 
-    const result = await commentsDB.updateCommentById(req.params, req.body);
+    const newDetaild = {...req.body, ...req.params}
+    const result = await commentsDB.updateCommentById(newDetaild);
 
 
     if (!result) {
@@ -76,7 +77,7 @@ commentsRouter.put('/:id/update', async (req, res) => {
 });
 
 // //// DELETE ////
-commentsRouter.delete('/:id/delete', async (req, res) => {
+commentsRouter.delete('/delete/:id', async (req, res) => {
 
     const result = await commentsDB.deleteCommentById(req.params);
 

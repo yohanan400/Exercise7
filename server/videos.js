@@ -24,7 +24,7 @@ videosRouter.get('/', async (req, res)=>{
     res.status(200).send(result);
 });
 
-videosRouter.get('/:username/videos', async (req, res)=>{
+videosRouter.get('/videos/:username', async (req, res)=>{
     const result = await videosDB.getVideoByUsername(req.params);
 
     if (!result){
@@ -36,7 +36,7 @@ videosRouter.get('/:username/videos', async (req, res)=>{
 });
 
 //// POST ////
-videosRouter.post('/new/newVideo', async (req, res)=>{
+videosRouter.post('/newVideo', async (req, res)=>{
     const {error, value} = validate.newVideoValidation(req.body);
 
     if(!error){
@@ -63,7 +63,7 @@ videosRouter.post('/new/newVideo', async (req, res)=>{
 });
 
 // //// PUT ////
-videosRouter.put('/:id/update', async (req, res)=>{
+videosRouter.put('/update/:id', async (req, res)=>{
     const {error, value} = validate.updateVideoValidation(req.body);
 
     if(!error){
@@ -71,7 +71,8 @@ videosRouter.put('/:id/update', async (req, res)=>{
         return;
     }
 
-    const result = await videosDB.updateVideoById(req.params, req.body);
+    const newDetaild = {...req.body, ...req.params}
+    const result = await videosDB.updateVideoById(newDetaild);
 
 
     if (!result) {
@@ -83,7 +84,7 @@ videosRouter.put('/:id/update', async (req, res)=>{
 } );
 
 // //// DELETE ////
-videosRouter.delete('/:id/delete', async (req, res)=>{
+videosRouter.delete('/delete/:id', async (req, res)=>{
     
     const result = await videosDB.deleteVideoById(req.params);
 

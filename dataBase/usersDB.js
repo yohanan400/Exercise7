@@ -39,7 +39,7 @@ async function getUserByEmail({email}) {
 }
 
 async function getUsers() {
-    const result = await await pool.query("SELECT * FROM users  WHERE isDeleted = false");
+    const result = await pool.query("SELECT * FROM users  WHERE isDeleted = false");
 
     return result[0];
 }

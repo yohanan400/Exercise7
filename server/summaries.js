@@ -38,7 +38,7 @@ summeriesRouter.get('/:id', async (req, res)=>{
 });
 
 //// POST ////
-summeriesRouter.post('/new/newSummary', async (req, res)=>{
+summeriesRouter.post('/newSummary', async (req, res)=>{
     const {error, value} = validate.newSummariesValidation(req.body);
 
     if(!error){
@@ -65,7 +65,7 @@ summeriesRouter.post('/new/newSummary', async (req, res)=>{
 });
 
 // //// PUT ////
-summeriesRouter.put('/:id/update', async (req, res)=>{
+summeriesRouter.put('/update/:id', async (req, res)=>{
     const {error, value} = validate.updateSummaryValidation(req.body);
 
     if(!error){
@@ -73,7 +73,8 @@ summeriesRouter.put('/:id/update', async (req, res)=>{
         return;
     }
 
-    const result = await summariesDB.updateSummaryById(req.params, req.body);
+    const newDetaild = {...req.body, ...req.params}
+    const result = await summariesDB.updateSummaryById(newDetaild);
 
 
     if (!result) {
@@ -85,7 +86,7 @@ summeriesRouter.put('/:id/update', async (req, res)=>{
 } );
 
 // //// DELETE ////
-summeriesRouter.delete('/:id/delete', async (req, res)=>{
+summeriesRouter.delete('/delete/:id', async (req, res)=>{
     
     const result = await summariesDB.deleteSummary(req.params);
 

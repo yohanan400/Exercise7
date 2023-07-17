@@ -44,6 +44,10 @@ async function getPostsByUsername({username}) {
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
 async function updatePostById({id, title, body, username}) {
+
+    const oldDetails = await getPostById(id);
+    const {title, body, username, id} = {...oldDetails, ... newDetails};
+
     const result = await pool.query("UPDATE posts SET title = ?, body = ?, username = ? WHERE Id = ? ",
         [title, body, username, id]
     );

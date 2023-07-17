@@ -2,8 +2,8 @@ const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
-function addCluster({categoty, cluster_name, supervisor_user}) {
-    const result = pool.query("INSERT INTO clusters (categoty, cluster_name, supervisor_user) VALUES (?, ?, ?)",
+async function addCluster({categoty, cluster_name, supervisor_user}) {
+    const result = await pool.query("INSERT INTO clusters (categoty, cluster_name, supervisor_user) VALUES (?, ?, ?)",
         [categoty, cluster_name, supervisor_user]
     );
 
@@ -12,17 +12,17 @@ function addCluster({categoty, cluster_name, supervisor_user}) {
 
 //// READ ////
 
-function getClustersByCategory({category}) {
-    const result = pool.query("SELECT * FROM clusters WHERE category = ?", 
+async function getClustersByCategory({category}) {
+    const result = await pool.query("SELECT * FROM clusters WHERE category = ?", 
         [category]
     );
 
     return result[0];
 }
 
-function getClusterByUsername({username}) {
-    const result = pool.query("SELECT * FROM clusters WHERE username = ?", 
-        [username]
+async function getClusterById({id}) {
+    const result = await pool.query("SELECT * FROM clusters WHERE Id = ?", 
+        [id]
     );
 
     return result[0];
@@ -34,16 +34,20 @@ async function getClusters() {
     return result[0];
 }
 
-function getLimmitedClusters({limit, offset = 0}) {
-    const result = pool.query("SELECT * FROM clusters LIMIT = ? OFFSET = ?", [limit, offset]);
+async function getLimmitedClusters({limit, offset = 0}) {
+    const result = await pool.query("SELECT * FROM clusters LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
 
 //// UPDATE ////
 
-function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
-    const result = pool.query("UPDATE clusters SET categoty = ?, cluster_name = ?, supervisor_user = ?, username = ? WHERE Id = ? ",
+async function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
+    const oldDetails = await getClusterById(id);
+
+    const {categoty, cluster_name, supervisor_user, username, id} = {...oldDetails, ... newDetails};
+
+    const result = await pool.query("UPDATE clusters SET categoty = ?, cluster_name = ?, supervisor_user = ?, username = ? WHERE Id = ? ",
         [categoty, cluster_name, supervisor_user, username, id]
     );
 
@@ -52,8 +56,8 @@ function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
 
 //// DELETE ////
 
-function deleteClusterById({id}) {
-    const result = pool.query("UPDATE clusters SET isDelete = 1 WHERE Id = ?",
+async function deleteClusterById({id}) {
+    const result = await pool.query("UPDATE clusters SET isDelete = 1 WHERE Id = ?",
         [id]
     );
 
@@ -63,7 +67,7 @@ function deleteClusterById({id}) {
 module.exports = {
     addCluster,
     getClustersByCategory,
-    getClusterByUsername,
+    getClusterById,
     getClusters,
     getLimmitedClusters,
     updateClusterById,

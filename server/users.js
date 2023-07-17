@@ -1,15 +1,16 @@
 const express = require('express');
 const validate = require('./validates/usersValidates');
 const usersDB = require('../dataBase/usersDB');
+const { json } = require('stream/consumers');
 
 const usersRouter = express.Router();
 
 //// GET ////
-usersRouter.get('/:username/info', async (req, res)=>{
+usersRouter.get('/info/:username', async (req, res)=>{
     
     const result = await usersDB.getUserByUsername(req.params);
     
-    if(!result){
+    if(!result[0]){
         res.status(400).send("username or password incorrect");
         return;
     }
@@ -17,22 +18,21 @@ usersRouter.get('/:username/info', async (req, res)=>{
     res.status(200).send(result);
 });
 
-usersRouter.get('/:username/all', async (req, res)=>{
+usersRouter.get('/all/:username', async (req, res)=>{
     
-    const userDetailes = usersDB.getUserByUsername(req.params);
-    
-    if(userDetailes.access_level_id != 1){
+    const userDetailes = await usersDB.getUserByUsername(req.params);
+    if(userDetailes[0].access_level_Id !== 1){
         res.status(403).send(`${req.params.username} does not have access for this action.`);
         return;
     }
     
     const result = await usersDB.getUsers(req.params);
     
-    if(!result){
+    if(!result[0]){
         res.status(400).send("something went wrong, please try again");
         return;
     }
-    
+    console.log(result[0]);
     res.status(200).send(result);
 });
 
@@ -47,7 +47,7 @@ usersRouter.post('/login', async (req, res)=>{
     
     const result = await usersDB.getUserByUsername(req.body);
 
-    if(!result){
+    if(!result[0]){
         res.status(400).send("username or password incorrect");
         return;
     }
@@ -60,7 +60,7 @@ usersRouter.post('/login', async (req, res)=>{
     res.status(200).send(result);
 });
 
-usersRouter.post('/register/new', async (req, res)=>{
+usersRouter.post('/register', async (req, res)=>{
  
     const {error, value} = validate.userRegisterDetailsValidate(req.body);
 
@@ -71,7 +71,7 @@ usersRouter.post('/register/new', async (req, res)=>{
 
     const result = await usersDB.addUser(req.body);
 
-    if(!result){
+    if(!result[0]){
         res.status(400).send("something went wrong, please try again");
         return;
     }
@@ -80,7 +80,7 @@ usersRouter.post('/register/new', async (req, res)=>{
 });
 
 //// PUT ////
-usersRouter.put('/:username/update', async (req, res)=>{
+usersRouter.put('/update/:username', async (req, res)=>{
   
     const {error, value} = validate.userUpdateDetailsValidate(req.body);
 
@@ -93,7 +93,7 @@ usersRouter.put('/:username/update', async (req, res)=>{
     const newDetaild = {...req.body, ...req.params}
     const result = await usersDB.updateUser(newDetaild);
 
-    if(!result){
+    if(!result[0]){
         res.status(400).send("something went wrong, please try again");
         return;
     }
@@ -102,11 +102,11 @@ usersRouter.put('/:username/update', async (req, res)=>{
 });
 
 //// DELETE ////
-usersRouter.delete('/:username/delete', async (req, res) => {
+usersRouter.delete('/delete/:username', async (req, res) => {
 
     const result = await usersDB.deleteUserByUsername(req.params);
     
-    if(!result){
+    if(!result[0]){
         res.status(400).send("something went wrong, please try again");
         return;
     }

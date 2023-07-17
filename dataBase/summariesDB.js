@@ -51,6 +51,10 @@ async function getLimmitedSummaries({limit, offset = 0}) {
 
 //// UPDATE ////
 async function updateSummaryById({ title, path, category, username, id }) {
+
+    const oldDetails = await getSummaryById(id);
+    const {title, path, category, username, id} = {...oldDetails, ... newDetails};
+   
     const result = await pool.query(`UPDATE roles SET title = ?, path = ?, category = ?, username = ? 
                                 WHERE Id = ? `,
         [title, path, category, username, id]
