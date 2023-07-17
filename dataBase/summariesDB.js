@@ -14,7 +14,7 @@ async function addSummary({ category, title, username, path }) {
 
 //// READ ////
 async function getSummaryById({ id }) {
-    const result = await pool.query("SELECT * FROM summaries WHERE id = ?",
+    const result = await pool.query("SELECT * FROM summaries WHERE id = ? AND isDeleted = 0",
         [id]
     );
 
@@ -22,7 +22,7 @@ async function getSummaryById({ id }) {
 }
 
 async function getSummaryByCategory({ category }) {
-    const result = await pool.query("SELECT * FROM summaries WHERE category = ?",
+    const result = await pool.query("SELECT * FROM summaries WHERE category = ? AND isDeleted = 0",
         [category]
     );
 
@@ -30,7 +30,7 @@ async function getSummaryByCategory({ category }) {
 }
 
 async function getSummaryByUsername({ username }) {
-    const result = await pool.query("SELECT * FROM summaries WHERE username = ?",
+    const result = await pool.query("SELECT * FROM summaries WHERE username = ? AND isDeleted = 0",
         [username]
     );
 
@@ -38,13 +38,13 @@ async function getSummaryByUsername({ username }) {
 }
 
 async function getSummaries() {
-    const result = await pool.query("SELECT * FROM summaries");
+    const result = await pool.query("SELECT * FROM summaries WHERE isDeleted = 0");
 
     return result[0];
 }
 
 async function getLimmitedSummaries({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM summaries LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM summaries WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
@@ -66,7 +66,7 @@ async function updateSummaryById({ title, path, category, username, id }) {
 
 //// DELETE ////
 async function deleteSummary({ id }) {
-    const result = await pool.query("UPDATE summaries SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE summaries SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

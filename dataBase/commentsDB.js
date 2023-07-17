@@ -13,25 +13,25 @@ async function addComment({postId, title, body, username}) {
 //// READ ////
 
 async function getComments() {
-    const result = await pool.query("SELECT * FROM comments");
+    const result = await pool.query("SELECT * FROM comments WHERE isDeleted = 0");
 
     return result[0];
 }
 
 async function getCommentById({id}) {
-    const result = await pool.query("SELECT * FROM comments WHERE Id = ?", [id]);
+    const result = await pool.query("SELECT * FROM comments WHERE Id = ? AND isDeleted = 0", [id]);
 
     return result[0];
 }
 
 async function getLimmitedComments({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM comments LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM comments WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
 
 async function getCommentsByUsername({username}) {
-    const result = await pool.query("SELECT * FROM comments WHERE username = ? AND isDelete = 0", [username]);
+    const result = await pool.query("SELECT * FROM comments WHERE username = ? AND isDeleted = 0", [username]);
 
     return result[0];
 }
@@ -53,7 +53,7 @@ async function updateCommentById({id, postId, title, body, username}) {
 //// DELETE ////
 
 async function deleteCommentById({id}) {
-    const result = await pool.query("UPDATE comments SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE comments SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

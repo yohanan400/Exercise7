@@ -13,7 +13,7 @@ async function addAccessLevel({accessType}) {
 //// READ ////
 
 async function getAllAccessLevels() {
-    const result = await pool.query("SELECT * FROM access_level");
+    const result = await pool.query("SELECT * FROM access_level WHERE isDeleted = 0");
 
     return result[0];
 }
@@ -31,7 +31,7 @@ async function updateAccessLevelById({access_type, id}) {
 //// DELETE ////
 
 async function deleteAccessLevel({id}) {
-    const result = await pool.query("UPDATE access_level SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE access_level SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

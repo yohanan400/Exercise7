@@ -13,7 +13,7 @@ async function addArticle({categoty, title, body, username}) {
 //// READ ////
 
 async function getArticleByTitle({title}) {
-    const result = await pool.query("SELECT * FROM articles WHERE title = ? AND isDelete = false", 
+    const result = await pool.query("SELECT * FROM articles WHERE title = ? AND isDeleted = 0", 
         [title]
     );
 
@@ -21,7 +21,7 @@ async function getArticleByTitle({title}) {
 }
 
 async function getArticleById({id}) {
-    const result = await pool.query("SELECT * FROM articles WHERE Id = ? AND isDelete = false", 
+    const result = await pool.query("SELECT * FROM articles WHERE Id = ? AND isDeleted = 0", 
         [id]
     );
 
@@ -29,7 +29,7 @@ async function getArticleById({id}) {
 }
 
 async function getArticlesByCategory({category}) {
-    const result = await pool.query("SELECT * FROM articles WHERE category = ? AND isDelete = false", 
+    const result = await pool.query("SELECT * FROM articles WHERE category = ? AND isDeleted = 0", 
         [category]
     );
 
@@ -37,7 +37,7 @@ async function getArticlesByCategory({category}) {
 }
 
 async function getArticlesByUsername({username}) {
-    const result = await pool.query("SELECT * FROM articles WHERE username = ? AND isDelete = false", 
+    const result = await pool.query("SELECT * FROM articles WHERE username = ? AND isDeleted = 0", 
         [username]
     );
 
@@ -45,13 +45,13 @@ async function getArticlesByUsername({username}) {
 }
 
 async function getArticles() {
-    const result = await pool.query("SELECT * FROM articles AND isDelete = false");
+    const result = await pool.query("SELECT * FROM articles AND isDeleted = 0");
 
     return result[0];
 }
 
 async function getLimmitedArticles({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM articles LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM articles WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
@@ -73,7 +73,7 @@ async function updateArticleById(newDetails) {
 //// DELETE ////
 
 async function deleteArticleById({id}) {
-    const result = await pool.query("UPDATE articles SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE articles SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

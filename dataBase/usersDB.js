@@ -31,7 +31,7 @@ async function getUserByUsername({username}) {
 
 // for username or password recovery
 async function getUserByEmail({email}) {
-    const result = await pool.query("SELECT * FROM users WHERE email = ? AND isDeleted = false",
+    const result = await pool.query("SELECT * FROM users WHERE email = ? AND isDeleted = 0",
         [email]
     );
 
@@ -39,7 +39,7 @@ async function getUserByEmail({email}) {
 }
 
 async function getUsers() {
-    const result = await pool.query("SELECT * FROM users  WHERE isDeleted = false");
+    const result = await pool.query("SELECT * FROM users  WHERE isDeleted = 0");
 
     return result[0];
 }

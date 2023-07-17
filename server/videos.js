@@ -24,7 +24,7 @@ videosRouter.get('/', async (req, res)=>{
     res.status(200).send(result);
 });
 
-videosRouter.get('/videos/:username', async (req, res)=>{
+videosRouter.get('/byUsername/:username', async (req, res)=>{
     const result = await videosDB.getVideoByUsername(req.params);
 
     if (!result){

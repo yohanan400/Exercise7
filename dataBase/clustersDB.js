@@ -13,7 +13,7 @@ async function addCluster({categoty, cluster_name, supervisor_user}) {
 //// READ ////
 
 async function getClustersByCategory({category}) {
-    const result = await pool.query("SELECT * FROM clusters WHERE category = ?", 
+    const result = await pool.query("SELECT * FROM clusters WHERE category = ? AND isDeleted = 0", 
         [category]
     );
 
@@ -21,7 +21,7 @@ async function getClustersByCategory({category}) {
 }
 
 async function getClusterById({id}) {
-    const result = await pool.query("SELECT * FROM clusters WHERE Id = ?", 
+    const result = await pool.query("SELECT * FROM clusters WHERE Id = ?  AND isDeleted = 0", 
         [id]
     );
 
@@ -29,13 +29,13 @@ async function getClusterById({id}) {
 }
 
 async function getClusters() {
-    const result = await pool.query("SELECT * FROM clusters");
+    const result = await pool.query("SELECT * FROM clusters WHERE isDeleted = 0");
 
     return result[0];
 }
 
 async function getLimmitedClusters({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM clusters LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM clusters WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
@@ -57,7 +57,7 @@ async function updateClusterById({id, categoty, cluster_name, supervisor_user}) 
 //// DELETE ////
 
 async function deleteClusterById({id}) {
-    const result = await pool.query("UPDATE clusters SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE clusters SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

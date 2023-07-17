@@ -13,31 +13,31 @@ async function addVideo({Id, username, category, path}) {
 //// READ ////
 
 async function getVideoByUsername({username}) {
-    const result = await pool.query("SELECT * FROM videos WHERE username = ?", [username]);
+    const result = await pool.query("SELECT * FROM videos WHERE username = ? AND isDeleted = 0", [username]);
 
     return result[0];
 }
 
 async function getVideoByCategory({category}) {
-    const result = await pool.query("SELECT * FROM videos WHERE category = ?", [category]);
+    const result = await pool.query("SELECT * FROM videos WHERE category = ? AND isDeleted = 0", [category]);
 
     return result[0];
 }
 
 async function getVideoById({id}) {
-    const result = await pool.query("SELECT * FROM videos WHERE Id = ?", [id]);
+    const result = await pool.query("SELECT * FROM videos WHERE Id = ? AND isDeleted = 0", [id]);
 
     return result[0];
 }
 
 async function getVideos() {
-    const result = await pool.query("SELECT * FROM videos");
+    const result = await pool.query("SELECT * FROM videos WHERE isDeleted = 0");
 
     return result[0];
 }
 
 async function getLimmitedVideos({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM videos LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM videos WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
@@ -59,7 +59,7 @@ async function updateVideoById({id, username, category, path}) {
 //// DELETE ////
 
 async function deleteVideoById({id}) {
-    const result = await pool.query("UPDATE videos SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE videos SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

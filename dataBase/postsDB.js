@@ -13,19 +13,19 @@ async function addPost({Id, title, body, username}) {
 //// READ ////
 
 async function getPosts() {
-    const result = await pool.query("SELECT * FROM posts");
+    const result = await pool.query("SELECT * FROM posts WHERE isDeleted = 0");
 
     return result[0];
 }
 
 async function getLimmitedPosts({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM posts LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM posts WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
 
     return result[0];
 }
 
 async function getPostById({id}) {
-    const result = await pool.query("SELECT * FROM posts WHERE id = ? AND isDelete = false",
+    const result = await pool.query("SELECT * FROM posts WHERE id = ? AND isDeleted = 0",
         [id]
     );
 
@@ -33,7 +33,7 @@ async function getPostById({id}) {
 }
 
 async function getPostsByUsername({username}) {
-    const result = await pool.query("SELECT * FROM posts WHERE username = ? AND isDelete = false",
+    const result = await pool.query("SELECT * FROM posts WHERE username = ? AND isDeleted = 0",
         [username]
     );
 
@@ -58,7 +58,7 @@ async function updatePostById({id, title, body, username}) {
 //// DELETE ////
 
 async function deletePostById({id}) {
-    const result = await pool.query("UPDATE posts SET isDelete = 1 WHERE Id = ?",
+    const result = await pool.query("UPDATE posts SET isDeleted = 1 WHERE Id = ?",
         [id]
     );
 

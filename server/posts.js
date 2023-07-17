@@ -24,7 +24,7 @@ postsRouter.get('/', async (req, res)=>{
     res.status(200).send(result);
 });
 
-postsRouter.get('/:id', async (req, res)=>{
+postsRouter.get('/byId/:id', async (req, res)=>{
     const result = await postsDB.getPostById(req.params);
 
     if(!result){
