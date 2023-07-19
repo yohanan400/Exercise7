@@ -6,7 +6,15 @@ const articlesRouter = express.Router();
 
 //// GET ////
 articlesRouter.get('/', async (req, res)=>{
-    const result = await articlesDB.getArticles();
+
+    let result;
+
+    if (req.query.limit) {
+        result = await articlesDB.getLimmitedArticles(req.query);
+    }
+    else {
+        result = await articlesDB.getArticles();
+    }
 
     if (!result){
         res.status(400).send("something went worng, please try again.");

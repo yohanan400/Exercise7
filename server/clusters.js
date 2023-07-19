@@ -10,7 +10,7 @@ clustersRouter.get('/', async (req, res)=>{
     var result; 
     
     if(req.query.limit){
-        result = await clustersDB.getLimmitedClusters(req.query.limit, req.query.offset);
+        result = await clustersDB.getLimmitedClusters(req.query);
     }
     else{
         result = await clustersDB.getClusters();

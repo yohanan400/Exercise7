@@ -19,20 +19,26 @@ usersRouter.get('/info/:username', async (req, res)=>{
 });
 
 usersRouter.get('/all/:username', async (req, res)=>{
-    
+
     const userDetailes = await usersDB.getUserByUsername(req.params);
+
+    if(!userDetailes[0]){
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
     if(userDetailes[0].access_level_Id !== 1){
         res.status(403).send(`${req.params.username} does not have access for this action.`);
         return;
     }
     
     const result = await usersDB.getUsers(req.params);
-    
+    console.log("result", result[0]);
+
     if(!result[0]){
         res.status(400).send("something went wrong, please try again");
         return;
     }
-    console.log(result[0]);
     res.status(200).send(result);
 });
 

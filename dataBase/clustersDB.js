@@ -42,10 +42,10 @@ async function getLimmitedClusters({limit, offset = 0}) {
 
 //// UPDATE ////
 
-async function updateClusterById({id, categoty, cluster_name, supervisor_user}) {
-    const oldDetails = await getClusterById(id);
+async function updateClusterById(newDetails) {
+    const oldDetails = await getClusterById(newDetails.id);
 
-    const {categoty, cluster_name, supervisor_user, username, id} = {...oldDetails, ... newDetails};
+    const {categoty, cluster_name, supervisor_user, username, id} = {...oldDetails, ...newDetails};
 
     const result = await pool.query("UPDATE clusters SET categoty = ?, cluster_name = ?, supervisor_user = ?, username = ? WHERE Id = ? ",
         [categoty, cluster_name, supervisor_user, username, id]

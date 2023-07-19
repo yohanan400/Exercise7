@@ -45,7 +45,7 @@ async function getArticlesByUsername({username}) {
 }
 
 async function getArticles() {
-    const result = await pool.query("SELECT * FROM articles AND isDeleted = 0");
+    const result = await pool.query("SELECT * FROM articles WHERE isDeleted = 0");
 
     return result[0];
 }

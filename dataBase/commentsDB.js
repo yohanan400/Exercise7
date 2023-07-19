@@ -38,10 +38,10 @@ async function getCommentsByUsername({username}) {
 
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
-async function updateCommentById({id, postId, title, body, username}) {
+async function updateCommentById(newDetails) {
     
     const oldDetails = await getCommentById(id);
-    const {postId, title, body, username, id} = {...oldDetails, ... newDetails};
+    const {postId, title, body, username, id} = {...oldDetails, ...newDetails};
 
     const result = await pool.query("UPDATE comments SET postId = ?, title = ?, body = ?, username = ? WHERE Id = ? ",
         [postId, title, body, username, id]

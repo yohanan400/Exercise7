@@ -44,10 +44,10 @@ async function getLimmitedVideos({limit, offset = 0}) {
 
 //// UPDATE ////
 // Teoreticlly support. Logicly not for use.
-async function updateVideoById({id, username, category, path}) {
+async function updateVideoById(newDetails) {
 
     const oldDetails = await getVideoById(newDetails.articleId);
-    const {category, username, path, id} = {...oldDetails, ... newDetails};
+    const {category, username, path, id} = {...oldDetails, ...newDetails};
    
     const result = await pool.query("UPDATE posts SET category = ?, path = ?, username = ? WHERE Id = ? ",
         [category, username, path, id]

@@ -4,45 +4,64 @@ import "./Login.css";
 
 export default function Login() {
 
-    // React States
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [userData, setuserData] = useState([]);
 
     async function handleSubmit(event) {
-        //Prevent page reload
         event.preventDefault();
-        var { uname, pass } = document.forms[0];
-        
-        // Find user login info
-        setuserData( (await fetch("http://localhost:3001/users/admin/all")).json());
-        console.log(userData);
-        if (userData) {
-            setIsSubmitted(true);
+
+        //get fildes values
+        const uname = document.forms[0][0].value;
+        const pass = document.forms[0][1].value;
+
+        //preper data
+        let formData = new FormData();
+        formData.append('username', uname);
+        formData.append('password', pass);
+
+        const response = await fetch(`http://localhost:3001/users/login`, {
+            method: "post",
+            body: formData
+        });
+
+        //get response status
+        let status = response.status;
+
+        if (status != 200) {
+            console.log("text!");
+            const res = await response.text();
+            setErrorMessages({name: "uname", message: res});
+        }else{
+            console.log("json!");
+            const res = await response.json();
+            setuserData(res);
         }
 
+        if (userData[0]) {
+            setIsSubmitted(true);
+        }
     }
 
-    // Generate JSX code for error message
-    const renderErrorMessage = (name) =>
-        name === errorMessages.name && (
+    // Generate error message
+    const renderErrorMessage = () =>
+        errorMessages.name && (
             <div className="error">{errorMessages.message}</div>
         );
 
-    // JSX code for login form
+    // login form
     const renderForm = (
         <div className="form">
             <form onSubmit={handleSubmit}>
                 <div className="input-container">
                     <label>Username </label>
                     <input type="text" name="uname" required />
-                    {renderErrorMessage("uname")}
                 </div>
                 <div className="input-container">
                     <label>Password </label>
                     <input type="password" name="pass" required />
-                    {renderErrorMessage("pass")}
                 </div>
+                <div>{renderErrorMessage()}</div>
                 <div className="button-container">
                     <input type="submit" />
                 </div>
