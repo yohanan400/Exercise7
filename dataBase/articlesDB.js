@@ -22,7 +22,7 @@ async function getArticleByTitle({title}) {
 
 async function getArticleById({id}) {
     const result = await pool.query("SELECT * FROM articles WHERE Id = ? AND isDeleted = 0", 
-        [id]
+        [parseInt(id)]
     );
 
     return result[0];
@@ -51,7 +51,7 @@ async function getArticles() {
 }
 
 async function getLimmitedArticles({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM articles WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM articles WHERE isDeleted = 0 LIMIT ? OFFSET ?", [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -74,7 +74,7 @@ async function updateArticleById(newDetails) {
 
 async function deleteArticleById({id}) {
     const result = await pool.query("UPDATE articles SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0

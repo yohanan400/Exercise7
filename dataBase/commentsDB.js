@@ -1,17 +1,15 @@
 const { pool } = require('./connectionDB');
 
 //// CREATE ////
-
 async function addComment({postId, title, body, username}) {
     const result = await pool.query("INSERT INTO comments (postId, title, body, username) VALUES (?, ?, ?, ?)",
-        [postId, title, body, username]
+        [parseInt(postId), title, body, username]
     );
 
     return result[0].insertid;
 }
 
 //// READ ////
-
 async function getComments() {
     const result = await pool.query("SELECT * FROM comments WHERE isDeleted = 0");
 
@@ -19,13 +17,29 @@ async function getComments() {
 }
 
 async function getCommentById({id}) {
-    const result = await pool.query("SELECT * FROM comments WHERE Id = ? AND isDeleted = 0", [id]);
+    const result = await pool.query("SELECT * FROM comments WHERE Id = ? AND isDeleted = 0",
+     [parseInt(id)]);
+
+    return result[0];
+}
+
+async function getCommentByPostId({postId}) {
+    const result = await pool.query("SELECT * FROM comments WHERE postId = ? AND isDeleted = 0",
+     [parseInt(postId)]);
+
+    return result[0];
+}
+
+async function getLimmitedCommentsByPostId({postId, limit, offset = 0}) {
+    const result = await pool.query("SELECT * FROM comments WHERE postId = ? AND isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(postId), parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
 
 async function getLimmitedComments({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM comments WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM comments WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -51,10 +65,9 @@ async function updateCommentById(newDetails) {
 }
 
 //// DELETE ////
-
 async function deleteCommentById({id}) {
     const result = await pool.query("UPDATE comments SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0
@@ -65,6 +78,8 @@ module.exports = {
     getComments,
     getLimmitedComments,
     getCommentById,
+    getCommentByPostId,
+    getLimmitedCommentsByPostId,
     getCommentsByUsername,
     updateCommentById,
     deleteCommentById

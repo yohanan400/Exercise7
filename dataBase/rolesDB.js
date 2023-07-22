@@ -14,7 +14,7 @@ async function addRole({role_title}) {
 
 async function getRoleById({id}) {
     const result = await pool.query("SELECT * FROM roles WHERE id = ? AND isDeleted = 0", 
-    [id]
+    [parseInt(id)]
     );
 
     return result[0];
@@ -27,7 +27,8 @@ async function getRoles() {
 }
 
 async function getLimmitedRoles({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM roles WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM roles WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -36,7 +37,7 @@ async function getLimmitedRoles({limit, offset = 0}) {
 
 async function updateRoleById({role_title, id}) {
     const result = await pool.query("UPDATE roles SET role_title = ? WHERE Id = ? ",
-        [role_title, id]
+        [role_title, parseInt(id)]
     );
 
     return result[0].affectedRows > 0
@@ -46,7 +47,7 @@ async function updateRoleById({role_title, id}) {
 
 async function deleteCategory({id}) {
     const result = await pool.query("UPDATE roles SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0

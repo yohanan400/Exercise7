@@ -35,6 +35,17 @@ postsRouter.get('/byId/:id', async (req, res)=>{
     res.status(200).send(result);
 });
 
+postsRouter.get('/byCategory/:category', async (req, res)=>{
+    const result = await postsDB.getPostsByCategory(req.params);
+
+    if(!result){
+        res.status(400).send("something went wrong, please try again.");
+        return;
+    }
+
+    res.status(200).send(result);
+});
+
 postsRouter.get('/all/:username', async (req, res)=>{
     const result = await postsDB.getPostsByUsername(req.params);
 
@@ -47,7 +58,7 @@ postsRouter.get('/all/:username', async (req, res)=>{
 });
 
 //// POST ////
-postsRouter.post('/newPost', async (req, res)=>{
+postsRouter.post('/new', async (req, res)=>{
     const {error, value} = validate.newPostValidation(req.body);
 
     if(!error){

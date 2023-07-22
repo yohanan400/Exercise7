@@ -15,7 +15,7 @@ async function addSummary({ category, title, username, path }) {
 //// READ ////
 async function getSummaryById({ id }) {
     const result = await pool.query("SELECT * FROM summaries WHERE id = ? AND isDeleted = 0",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0];
@@ -44,7 +44,8 @@ async function getSummaries() {
 }
 
 async function getLimmitedSummaries({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM summaries WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM summaries WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -67,7 +68,7 @@ async function updateSummaryById(newDetails) {
 //// DELETE ////
 async function deleteSummary({ id }) {
     const result = await pool.query("UPDATE summaries SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0

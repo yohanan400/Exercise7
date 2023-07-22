@@ -36,7 +36,7 @@ videosRouter.get('/byUsername/:username', async (req, res)=>{
 });
 
 //// POST ////
-videosRouter.post('/newVideo', async (req, res)=>{
+videosRouter.post('/new', async (req, res)=>{
     const {error, value} = validate.newVideoValidation(req.body);
 
     if(!error){

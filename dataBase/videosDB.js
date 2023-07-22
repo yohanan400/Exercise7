@@ -4,7 +4,7 @@ const { pool } = require('./connectionDB');
 
 async function addVideo({Id, username, category, path}) {
     const result = await pool.query("INSERT INTO videos (Id, username, category, path) VALUES (?, ?, ?, ?)",
-        [Id, username, category, path]
+        [parseInt(Id), username, category, path]
     );
 
     return result[0].insertid;
@@ -25,7 +25,8 @@ async function getVideoByCategory({category}) {
 }
 
 async function getVideoById({id}) {
-    const result = await pool.query("SELECT * FROM videos WHERE Id = ? AND isDeleted = 0", [id]);
+    const result = await pool.query("SELECT * FROM videos WHERE Id = ? AND isDeleted = 0",
+     [parseInt(id)]);
 
     return result[0];
 }
@@ -37,7 +38,8 @@ async function getVideos() {
 }
 
 async function getLimmitedVideos({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM videos WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM videos WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -60,7 +62,7 @@ async function updateVideoById(newDetails) {
 
 async function deleteVideoById({id}) {
     const result = await pool.query("UPDATE videos SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0

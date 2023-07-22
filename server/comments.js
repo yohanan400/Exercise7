@@ -36,8 +36,26 @@ commentsRouter.get('/all/:username', async (req, res) => {
     res.status(200).send(result);
 });
 
+commentsRouter.get('/byPostId/:postId', async (req, res) => {
+
+    let result;
+
+    if (req.query.limit) {
+        result = await commentsDB.getLimmitedCommentsByPostId(req.params.postId, req.query.limit, req.query.offset);
+    }
+    else {
+        result = await commentsDB.getCommentByPostId(req.params);
+    }
+
+    if (!result) {
+        res.status(400).send("something went worng, please try again.");
+        return;
+    }
+
+    res.status(200).send(result);
+});
 //// POST ////
-commentsRouter.post('/newCluster', async (req, res) => {
+commentsRouter.post('/new', async (req, res) => {
     const { error, value } = validate.newcommentValidation(req.body);
 
     if (!error) {

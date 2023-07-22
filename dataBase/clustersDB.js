@@ -22,7 +22,7 @@ async function getClustersByCategory({category}) {
 
 async function getClusterById({id}) {
     const result = await pool.query("SELECT * FROM clusters WHERE Id = ?  AND isDeleted = 0", 
-        [id]
+        [parseInt(id)]
     );
 
     return result[0];
@@ -35,7 +35,8 @@ async function getClusters() {
 }
 
 async function getLimmitedClusters({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM clusters WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM clusters WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -58,7 +59,7 @@ async function updateClusterById(newDetails) {
 
 async function deleteClusterById({id}) {
     const result = await pool.query("UPDATE clusters SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0

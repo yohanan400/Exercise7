@@ -58,7 +58,7 @@ articlesRouter.get('/byUsername/:username', async(req, res)=>{
 } );
 
 //// POST ////
-articlesRouter.post('/newArticle', async (req, res)=>{
+articlesRouter.post('/new', async (req, res)=>{
     const {error, value} = validate.newArticleValidation(req.body);
 
     if(!error){

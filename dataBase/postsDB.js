@@ -4,7 +4,7 @@ const { pool } = require('./connectionDB');
 
 async function addPost({Id, title, body, username}) {
     const result = await pool.query("INSERT INTO posts (Id, title, body, username) VALUES (?, ?, ?, ?)",
-        [Id, title, body, username]
+        [parseInt(Id), title, body, username]
     );
 
     return result[0].insertid;
@@ -19,14 +19,15 @@ async function getPosts() {
 }
 
 async function getLimmitedPosts({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM posts WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM posts WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
 
 async function getPostById({id}) {
     const result = await pool.query("SELECT * FROM posts WHERE id = ? AND isDeleted = 0",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0];
@@ -35,6 +36,14 @@ async function getPostById({id}) {
 async function getPostsByUsername({username}) {
     const result = await pool.query("SELECT * FROM posts WHERE username = ? AND isDeleted = 0",
         [username]
+    );
+
+    return result[0];
+}
+
+async function getPostsByCategory({category}) {
+    const result = await pool.query("SELECT * FROM posts WHERE category = ? AND isDeleted = 0",
+        [category]
     );
 
     return result[0];
@@ -59,7 +68,7 @@ async function updatePostById(newDetails) {
 
 async function deletePostById({id}) {
     const result = await pool.query("UPDATE posts SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0
@@ -71,6 +80,7 @@ module.exports = {
     getLimmitedPosts,
     getPostById,
     getPostsByUsername,
+    getPostsByCategory,
     updatePostById,
     deletePostById
 }

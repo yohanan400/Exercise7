@@ -27,7 +27,7 @@ clustersRouter.get('/', async (req, res)=>{
 });
 
 //// POST ////
-clustersRouter.post('/newCluster', async (req, res)=>{
+clustersRouter.post('/new', async (req, res)=>{
     const {error, value} = validate.newClusterValidation(req.body);
 
     if(!error){

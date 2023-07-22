@@ -14,7 +14,7 @@ async function addCategory({category_name}) {
 
 async function getCategoryById({id}) {
     const result = await pool.query("SELECT * FROM category WHERE id = ? AND isDeleted = 0", 
-    [id]
+    [parseInt(id)]
     );
 
     return result[0];
@@ -27,7 +27,8 @@ async function getCategories() {
 }
 
 async function getLimmitedCategories({limit, offset = 0}) {
-    const result = await pool.query("SELECT * FROM categories WHERE isDeleted = 0 LIMIT = ? OFFSET = ?", [limit, offset]);
+    const result = await pool.query("SELECT * FROM categories WHERE isDeleted = 0 LIMIT ? OFFSET ?",
+     [parseInt(limit), parseInt(offset)]);
 
     return result[0];
 }
@@ -36,7 +37,7 @@ async function getLimmitedCategories({limit, offset = 0}) {
 
 async function updateCategoryById({category_name, id}) {
     const result = await pool.query("UPDATE category SET category_name = ? WHERE Id = ? ",
-        [category_name, id]
+        [category_name, parseInt(id)]
     );
 
     return result[0].affectedRows > 0
@@ -46,7 +47,7 @@ async function updateCategoryById({category_name, id}) {
 
 async function deleteCategory({id}) {
     const result = await pool.query("UPDATE category SET isDeleted = 1 WHERE Id = ?",
-        [id]
+        [parseInt(id)]
     );
 
     return result[0].affectedRows > 0

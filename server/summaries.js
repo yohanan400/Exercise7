@@ -38,7 +38,7 @@ summeriesRouter.get('/:id', async (req, res)=>{
 });
 
 //// POST ////
-summeriesRouter.post('/newSummary', async (req, res)=>{
+summeriesRouter.post('/new', async (req, res)=>{
     const {error, value} = validate.newSummariesValidation(req.body);
 
     if(!error){
