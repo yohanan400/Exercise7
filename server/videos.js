@@ -35,6 +35,17 @@ videosRouter.get('/byUsername/:username', async (req, res)=>{
     res.status(200).send(result);
 });
 
+videosRouter.get('/byCategory/:category', async (req, res)=>{
+    const result = await videosDB.getVideoByCategory(req.params);
+
+    if (!result){
+        res.status(400).send("something went worng, please try again.");
+        return;
+    }
+
+    res.status(200).send(result);
+});
+
 //// POST ////
 videosRouter.post('/new', async (req, res)=>{
     const {error, value} = validate.newVideoValidation(req.body);

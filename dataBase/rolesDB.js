@@ -45,7 +45,7 @@ async function updateRoleById({role_title, id}) {
 
 //// DELETE ////
 
-async function deleteCategory({id}) {
+async function deleteRole({id}) {
     const result = await pool.query("UPDATE roles SET isDeleted = 1 WHERE Id = ?",
         [parseInt(id)]
     );
@@ -59,5 +59,5 @@ module.exports = {
     getRoles,
     getLimmitedRoles,
     updateRoleById,
-    deleteCategory
+    deleteRole
 }

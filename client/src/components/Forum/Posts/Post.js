@@ -1,4 +1,4 @@
-import { useEffect } from "react/cjs/react.production.min";
+import {useEffect} from "react";
 import Comments from "./Comments";
 
 export default function Post(props) {
