@@ -1,18 +1,21 @@
-import { useEffect, setState } from "react";
-import "node_modules/video-react/dist/video-react.css";
+import { useEffect, useState } from "react";
+import "../../../node_modules/video-react/dist/video-react.css";
+
 import { Player } from 'video-react';
 
 export default function Videos(props) {
 
-    const [videos, setVideos] = setState([]);
+    const [videos, setVideos] = useState([]);
 
-    useEffect(
-        async () => {
-            const fetchedData = await fetch(`http://localhost:3001/viseos/byCategory/${props.category}`);
-            const dataObject = fetchedData.json();
+    useEffect(() => {
+        async function fetchData() {
+            const fetchedData = await fetch(`http://localhost:3001/videos/byCategory/${props.category}`);
+            const dataObject = await fetchedData.json();
 
             setVideos(dataObject);
         }
+        fetchData();
+    }, []
     )
 
     return (

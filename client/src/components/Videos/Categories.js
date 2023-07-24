@@ -2,15 +2,18 @@ import { useState, useEffect } from "react";
 
 export default function Categories() {
 
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState([]);
 
-    useEffect(
-        async () => {
+    useEffect(() => {
+        async function fetchData() {
             const fetchedData = await fetch("http://localhost:3001/categories");
-            const dataObject = fetchedData.json();
+            const dataObject = await fetchedData.json();
 
             setCategories(dataObject);
-        }, []
+        }
+
+        fetchData();
+    }, []
     )
 
     return (
@@ -19,7 +22,7 @@ export default function Categories() {
             {categories.map(
                 (category) => (
                     <div>
-                        <lable>{category.category_name}</lable>
+                        <label>{category.category_name}</label>
                     </div>
                 )
             )}

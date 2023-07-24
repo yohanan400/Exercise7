@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getStorage, ref } from "firebase/storage";
+import { getStorage, ref, getDownloadURL } from "firestore-storage";
 
 export default function Summaries() {
 
@@ -14,7 +14,7 @@ export default function Summaries() {
         }, []
     )
 
-    downloadSummary = (path)=>{
+    const downloadSummary = (path)=>{
 
         // Create a reference with an initial file path and name
         const storage = getStorage();

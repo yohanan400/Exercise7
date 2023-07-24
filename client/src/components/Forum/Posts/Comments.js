@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Comment from "./Comment"
 
 export default function Comments(props) {
 

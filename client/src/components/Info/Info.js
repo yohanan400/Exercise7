@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 export default function Info(props) {
 
     const userDetails = props.user;
