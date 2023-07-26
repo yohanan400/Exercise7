@@ -6,101 +6,132 @@ const { json } = require('stream/consumers');
 const usersRouter = express.Router();
 
 //// GET ////
-usersRouter.get('/info/:username', async (req, res)=>{
-    
-    const result = await usersDB.getUserByUsername(req.params);
-    
-    if(!result[0]){
-        res.status(400).send("username or password incorrect");
-        return;
-    }
-    
-    res.status(200).send(result);
-});
+usersRouter.get('/info/:username', async (req, res) => {
 
-usersRouter.get('/all/:username', async (req, res)=>{
-
-    const userDetailes = await usersDB.getUserByUsername(req.params);
-
-    if(!userDetailes[0]){
+    let result;
+    try {
+        result = await usersDB.getUserByUsername(req.params);
+    } catch (e) {
         res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    if(userDetailes[0].access_level_Id !== 1){
-        res.status(403).send(`${req.params.username} does not have access for this action.`);
+    if (!result[0]) {
+        res.status(400).send(JSON.stringify("username or password incorrect"));
         return;
     }
-    
-    const result = await usersDB.getUsers(req.params);
-    console.log("result", result[0]);
 
-    if(!result[0]){
-        res.status(400).send("something went wrong, please try again");
+    res.status(200).send(result);
+});
+
+usersRouter.get('/all/:username', async (req, res) => {
+
+    let userDetailes
+
+    try {
+        userDetailes = await usersDB.getUserByUsername(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    if (!userDetailes[0]) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    if (userDetailes[0].access_level_Id !== 1) {
+        res.status(403).send(JSON.stringify(`${req.params.username} does not have access for this action.`));
+        return;
+    }
+
+    let result;
+    try {
+        result = await usersDB.getUsers(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    if (!result[0]) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
     res.status(200).send(result);
 });
 
 //// POST ////
-usersRouter.post('/login', async (req, res)=>{
-   const { error, value } =  validate.userLoginDetailsValidate(req.body)
+usersRouter.post('/login', async (req, res) => {
+    const { error, value } = validate.userLoginDetailsValidate(req.body)
 
-    if(error){
-        res.status(400).send(error.details.map(detail => detail.message).join('\n'))
+    if (error) {
+        res.status(400).send(error.details.map(detail => detail.message))
         return;
     }
-    
-    const result = await usersDB.getUserByUsername(req.body);
 
-    if(!result[0]){
-        res.status(400).send("username or password incorrect");
+    let result;
+    try {
+        result = await usersDB.getUserByUsername(req.body);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
-    
-    if(result[0].password != req.body.password){
-        res.status(400).send("username or password incorrect");
+
+    if (result[0].password != req.body.password || !result[0]) {
+        res.status(400).send(JSON.stringify("username or password incorrect"));
         return;
     }
 
     res.status(200).send(result);
 });
 
-usersRouter.post('/register', async (req, res)=>{
- 
-    const {error, value} = validate.userRegisterDetailsValidate(req.body);
+usersRouter.post('/register', async (req, res) => {
 
-    if(error){
-        res.status(400).send(error.details.map(detail => detail.message).join('\n'))
+    const { error, value } = validate.userRegisterDetailsValidate(req.body);
+
+    if (error) {
+        res.status(400).send(error.details.map(detail => detail.message))
         return;
     }
 
-    const result = await usersDB.addUser(req.body);
-
-    if(!result[0]){
-        res.status(400).send("something went wrong, please try again");
+    let result;
+    try {
+        result = await usersDB.addUser(req.body);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(201).send(result.toString());
+    if (!result[0]) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(201).send(JSON.stringify(result));
 });
 
 //// PUT ////
-usersRouter.put('/update/:username', async (req, res)=>{
-  
-    const {error, value} = validate.userUpdateDetailsValidate(req.body);
+usersRouter.put('/update/:username', async (req, res) => {
 
-    if(error){
-        res.status(400).send(error.details.map(detail => detail.message).join('\n'))
+    const { error, value } = validate.userUpdateDetailsValidate(req.body);
+
+    if (error) {
+        res.status(400).send(error.details.map(detail => detail.message))
         return;
     }
 
+    const newDetaild = { ...req.body, ...req.params }
 
-    const newDetaild = {...req.body, ...req.params}
-    const result = await usersDB.updateUser(newDetaild);
+    let result;
+    try {
+        result = await usersDB.updateUser(newDetaild);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
 
-    if(!result[0]){
-        res.status(400).send("something went wrong, please try again");
+    if (!result[0]) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
@@ -110,14 +141,20 @@ usersRouter.put('/update/:username', async (req, res)=>{
 //// DELETE ////
 usersRouter.delete('/delete/:username', async (req, res) => {
 
-    const result = await usersDB.deleteUserByUsername(req.params);
-    
-    if(!result[0]){
-        res.status(400).send("something went wrong, please try again");
+    let result;
+    try {
+        result = await usersDB.deleteUserByUsername(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send("user had been deleted");
+    if (!result[0]) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify("user had been deleted"));
 });
 
 module.exports = usersRouter;

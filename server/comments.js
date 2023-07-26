@@ -8,52 +8,68 @@ const commentsRouter = express.Router();
 commentsRouter.get('/', async (req, res) => {
 
     let result;
-
-    if (req.query.limit) {
-        result = await commentsDB.getLimmitedComments(req.query.limit, req.query.offset);
-    }
-    else {
-        result = await commentsDB.getComments();
-    }
-
-    if (!result) {
-        res.status(400).send("something went worng, please try again.");
+    try {
+        if (req.query.limit) {
+            result = await commentsDB.getLimmitedComments(req.query.limit, req.query.offset);
+        }
+        else {
+            result = await commentsDB.getComments();
+        }
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went worng, please try again."));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 });
 
 commentsRouter.get('/all/:username', async (req, res) => {
 
-    const result = await commentsDB.getCommentsByUsername(req.params);
-
-    if (!result) {
-        res.status(400).send("something went worng, please try again.");
+    let result;
+    try {
+        result = await commentsDB.getCommentsByUsername(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went worng, please try again."));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 });
 
 commentsRouter.get('/byPostId/:postId', async (req, res) => {
 
     let result;
 
-    if (req.query.limit) {
-        result = await commentsDB.getLimmitedCommentsByPostId(req.params.postId, req.query.limit, req.query.offset);
-    }
-    else {
-        result = await commentsDB.getCommentByPostId(req.params);
-    }
-
-    if (!result) {
-        res.status(400).send("something went worng, please try again.");
+    try {
+        if (req.query.limit) {
+            result = await commentsDB.getLimmitedCommentsByPostId(req.params.postId, req.query.limit, req.query.offset);
+        }
+        else {
+            result = await commentsDB.getCommentByPostId(req.params);
+        }
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 });
+
 //// POST ////
 commentsRouter.post('/new', async (req, res) => {
     const { error, value } = validate.newcommentValidation(req.body);
@@ -63,14 +79,20 @@ commentsRouter.post('/new', async (req, res) => {
         return;
     }
 
-    const result = await commentsDB.addComment(req.body);
-
-    if (!result) {
-        res.status(400).send("something went wrong, please try again.");
+    let result;
+    try {
+        result = await commentsDB.addComment(req.body);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 });
 
 // //// PUT ////
@@ -82,30 +104,42 @@ commentsRouter.put('/update/:id', async (req, res) => {
         return;
     }
 
-    const newDetaild = {...req.body, ...req.params}
-    const result = await commentsDB.updateCommentById(newDetaild);
+    const newDetaild = { ...req.body, ...req.params }
 
-
-    if (!result) {
-        res.status(400).send("something went wrong, please try again");
+    let result;
+    try {
+        result = await commentsDB.updateCommentById(newDetaild);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send("summary successfully updated");
+
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify("summary successfully updated"));
 });
 
 // //// DELETE ////
 commentsRouter.delete('/delete/:id', async (req, res) => {
 
-    const result = await commentsDB.deleteCommentById(req.params);
-
-    if (!result) {
-        res.status(400).send("something went worng, please try again.");
+    let result;
+    try {
+        result = await commentsDB.deleteCommentById(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went worng, please try again."));
+        return;
+    }
 
+    res.status(200).send(JSON.stringify(result));
 });
 
 module.exports = commentsRouter;

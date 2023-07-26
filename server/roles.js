@@ -4,63 +4,89 @@ const rolesDB = require("../dataBase/rolesDB");
 const rolesRouter = express.Router();
 
 //// GET ////
-rolesRouter.get('/', async (req, res)=>{
+rolesRouter.get('/', async (req, res) => {
 
-    let result; 
-    
-    if(req.query.limit){
-        result = await rolesDB.getLimmitedRoles(req.query.limit, req.query.offset);
-    }
-    else{
-        result = await rolesDB.getRoles();
-    }
-    
-    if (!result){
-        res.status(400).send("something went worng, please try again.");
+    let result;
+
+    try {
+        if (req.query.limit) {
+            result = await rolesDB.getLimmitedRoles(req.query.limit, req.query.offset);
+        }
+        else {
+            result = await rolesDB.getRoles();
+        }
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 });
 
 //// POST ////
-rolesRouter.post('/new', async (req, res)=>{
+rolesRouter.post('/new', async (req, res) => {
 
-    const result = await rolesDB.addRole(req.body);
+    let result;
 
-    if(!result){
-        res.status(400).send("something went wrong, please try again.");
+    try {
+        result = await rolesDB.addRole(req.body);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 });
 
 // //// PUT ////
-rolesRouter.put('/update/:id', async (req, res)=>{
- 
-    const newDetaild = {...req.body, ...req.params}
-    const result = await rolesDB.updateRoleById(newDetaild);
+rolesRouter.put('/update/:id', async (req, res) => {
+
+    const newDetaild = { ...req.body, ...req.params }
+    let result;
+
+    try {
+        result = await rolesDB.updateRoleById(newDetaild);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
 
     if (!result) {
-        res.status(400).send("something went wrong, please try again");
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
-} );
+    res.status(200).send(JSON.stringify(result));
+});
 
 // //// DELETE ////
-rolesRouter.delete('/delete/:id', async (req, res)=>{
-    
-    const result = await rolesDB.deleteRole(req.params);
+rolesRouter.delete('/delete/:id', async (req, res) => {
 
-    if (!result){
-        res.status(400).send("something went worng, please try again.");
+    let result;
+
+    try {
+        result = await rolesDB.deleteRole(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
 
-    res.status(200).send(result);
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
 
 });
 

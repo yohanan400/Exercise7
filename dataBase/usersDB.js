@@ -96,11 +96,10 @@ async function getUsers() {
 
 async function updateUser(newUserDetailes) {
 
-    const oldUserDetailes = getUserByUsername(newUserDetailes.username);
+    const oldUserDetailes = await getUserByUsername(newUserDetailes.username);
 
     const {fullname, password, email , username} = {...oldUserDetailes, ...newUserDetailes};
     
-
     const result = await pool.query("UPDATE users SET full_name = ?, password = ?, email = ? WHERE username = ? ",
         [fullname, password, email, username]
     );
