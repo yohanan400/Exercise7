@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import "./Login.css";
+import {userContext} from "../../App"
+import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({setuserData}) {
 
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [userData, setuserData] = useState([]);
+    const userData = useContext(userContext);
+    const navigate = useNavigate();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -28,20 +31,25 @@ export default function Login() {
         //get response status
         let status = response.status;
 
-        if (status != 200) {
-            console.log("text!");
+        if (status !== 200) {
             const res = await response.text();
             setErrorMessages({name: "uname", message: res});
         }else{
-            console.log("json!");
             const res = await response.json();
             setuserData(res);
-        }
-
-        if (userData[0]) {
-            setIsSubmitted(true);
+            gotoInfo();
         }
     }
+
+   const gotoInfo = ()=>{
+        navigate(`/info/`);
+    }
+
+    useEffect(()=>{
+        if (userData && userData[0]) {
+            setIsSubmitted(true);
+        }
+    }, []);
 
     // Generate error message
     const renderErrorMessage = () =>
@@ -73,8 +81,7 @@ export default function Login() {
         <div className="app">
             <div className="login-form">
                 <div className="title">Sign In</div>
-                {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
-                <button onClick={() => setIsSubmitted(false)}>log out</button>
+                {renderForm}
             </div>
         </div>
     );

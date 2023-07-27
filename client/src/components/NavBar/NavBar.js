@@ -1,14 +1,18 @@
 import { useState } from "react"
-import {Link, Outlet} from "react-router-dom"
+import {Link, Outlet, useNavigate} from "react-router-dom"
 
-export default function NavBar(){
+export default function NavBar({userData, setuserData}){
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+
+    const logout = ()=>{
+        setuserData();
+        navigate(`/login`);
+    }
 
     return (
         <>
             <div>
-                {console.log("in NavBar")}
                 <Link to="/forum">פורום</Link>
                 <span style={{padding:"10px"}}/>
                 <Link to="/articles">מאמרים</Link>
@@ -23,7 +27,8 @@ export default function NavBar(){
                 <Link to="/contact">צור קשר</Link>
                 <span style={{padding:"10px"}}/>
 
-                {isLoggedIn? <Link to="/info">פורום</Link> :<> <Link to="/login">התחבר</Link> / <Link to="/register">הרשם</Link></>}
+                {userData ? <><Link to="/info">פרופיל אישי</Link><button onClick={()=>logout()}>התנתק</button></> :
+                    <><Link to="/login">התחבר</Link> / <Link to="/register">הרשם</Link></>}
             </div>
             <Outlet/>
         </>

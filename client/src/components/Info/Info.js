@@ -1,52 +1,50 @@
 import { useState, useEffect } from "react";
 
-export default function Info(props) {
+export default function Info({ userDetails }) {
 
-    const userDetails = props.user;
+    const [roles, setRoles] = useState([]);
+    const [accessLevel, setaccessLevel] = useState([]);
+    const userInfo = userDetails[0];
 
-    const [roles, setRoles] = useState([])
-    const [accessLevel, setaccessLevel] = useState([])
+    async function fetchData() {
+        const fetchedData = await fetch("http://localhost:3001/roles/");
+        const dataObject = await fetchedData.json();
+        setRoles(dataObject);
 
-    useEffect(
-        async () => {
-            const fetchedData = await fetch("http://localhost:3001/roles/");
-            const dataObject = fetchedData.json();
+        const fetchedData2 = await fetch("http://localhost:3001/accessLevel/");
+        const dataObject2 = await fetchedData2.json();
+        setaccessLevel(dataObject2);
+    }
 
-            setRoles(dataObject);
-
-            const fetchedData2 = await fetch("http://localhost:3001/accessLevel/");
-            const dataObject2 = fetchedData2.json();
-
-            setaccessLevel(dataObject2);
-        }, []
-    )
+    useEffect(() => {
+        fetchData();
+    }, [])
 
     return (
         <>
             <div>
-                <img src={userDetails.profile_image_url} alt="profile image" />;
+                <img src={userInfo.profile_image_url} alt="profile image" />
             </div>
-
             <div>
                 <div>
-                    <lable>שם מלא:</lable>
-                    <input type="text" name="fullName" readonly="readonly">{userDetails.full_name}</input>
+                    <label>שם מלא:</label>
+                    <input type="text" name="fullName" readOnly="readonly" placeholder={userInfo.full_name} />
                 </div>
                 <div>
-                    <lable>שם משתמש:</lable>
-                    <input type="text" name="username" readonly="readonly">{userDetails.username}</input>
+                    <label>שם משתמש:</label>
+                    <input type="text" name="username" readOnly="readonly" placeholder={userInfo.username} />
                 </div>
                 <div>
-                    <lable>דוא"ל:</lable>
-                    <input type="text" name="email" readonly="readonly">{userDetails.email}</input>
+                    <label>דוא"ל:</label>
+                    <input type="text" name="email" readOnly="readonly" placeholder={userInfo.email} />
                 </div>
                 <div>
-                    <lable>תפקיד:</lable>
-                    <input type="text" name="role" readonly="readonly">{roles[userDetails.role_id]}</input>
+                    <label>תפקיד:</label>
+                    <input type="text" name="role" readOnly="readonly" placeholder={roles.length ? roles[userInfo.role_id].role_title : " " } />
                 </div>
                 <div>
-                    <lable>רמה:</lable>
-                    <input type="text" name="access_level_id" readonly="readonly">{accessLevel[userDetails.full_name]}</input>
+                    <label>רמה:</label>
+                    <input type="text" name="access_level_id" readOnly="readonly" placeholder={accessLevel.length ? accessLevel[userInfo.access_level_Id].access_type : " "} />
                 </div>
             </div>
         </>
