@@ -1,4 +1,4 @@
-const pool = require('./connectionDB');
+const { pool } = require('./connectionDB');
 
 //// CREATE ////
 
@@ -46,6 +46,7 @@ async function getSummaries() {
 async function getLimmitedSummaries({limit, offset = 0}) {
     const result = await pool.query("SELECT * FROM summaries WHERE isDeleted = 0 LIMIT ? OFFSET ?",
      [parseInt(limit), parseInt(offset)]);
+     
 
     return result[0];
 }

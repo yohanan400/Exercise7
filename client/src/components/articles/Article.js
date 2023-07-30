@@ -1,6 +1,24 @@
-export default function Article(props) {
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-    const article = props.article;
+export default function Article() {
+
+    const {title} = useParams();
+    const [article, setArticle] = useState({});
+
+    useEffect(
+        ()=>{
+            async function AtricleFetch(){
+                const fetchData = await fetch(`http://localhost:3001/articles/byTitle/${title}`);
+                const dataObject = await fetchData.json();
+                setArticle(dataObject[0]);
+
+                console.log("in Article", article);
+            }
+
+            AtricleFetch();
+        }, []
+    )
 
     return (
         <>

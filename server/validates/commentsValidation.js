@@ -2,8 +2,8 @@ const Joi = require('joi');
 
 function newcommentValidation(details){
     const schema = Joi.object({
-        title: Joi.string().max(45).required(),
-        body: Joi.string().max(45).required(),
+        title: Joi.string().max(100).required(),
+        body: Joi.string().max(1000).required(),
         username: Joi.string().max(45).required()
     });
 

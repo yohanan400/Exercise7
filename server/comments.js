@@ -58,6 +58,7 @@ commentsRouter.get('/byPostId/:postId', async (req, res) => {
             result = await commentsDB.getCommentByPostId(req.params);
         }
     } catch (e) {
+        console.log(e);
         res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
@@ -83,7 +84,7 @@ commentsRouter.post('/new', async (req, res) => {
     try {
         result = await commentsDB.addComment(req.body);
     } catch (e) {
-        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        res.status(400).send(JSON.stringify("something went wrong, please try again (catch)"));
         return;
     }
 

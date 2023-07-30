@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react";
+import { Link } from "react-router-dom";
 
 
 export default function Articles(){
@@ -25,7 +26,7 @@ export default function Articles(){
         {articlesList.map(
             (article)=>(
                 <div>
-                    <label>{article.title}</label>
+                    <Link to={`/articles/${article.title}`}>{article.title}</Link>
                 </div>
             )
         )}

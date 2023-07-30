@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
 
 app.use('/users', usersRouter);
 app.use('/articles', articlesRouter);
-app.use('/summeries', summeriesRouter);
+app.use('/summaries', summeriesRouter);
 app.use('/videos', videosRouter);
 app.use('/clusters', clustersRouter);
 app.use('/posts', postsRouter);

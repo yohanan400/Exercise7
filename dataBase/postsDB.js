@@ -41,9 +41,9 @@ async function getPostsByUsername({username}) {
     return result[0];
 }
 
-async function getPostsByCategory({category}) {
-    const result = await pool.query("SELECT * FROM posts WHERE category = ? AND isDeleted = 0",
-        [category]
+async function getPostsByCluster({cluster}) {
+    const result = await pool.query("SELECT * FROM posts WHERE cluster = ? AND isDeleted = 0",
+        [cluster]
     );
 
     return result[0];
@@ -80,7 +80,7 @@ module.exports = {
     getLimmitedPosts,
     getPostById,
     getPostsByUsername,
-    getPostsByCategory,
+    getPostsByCluster,
     updatePostById,
     deletePostById
 }

@@ -1,15 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Comment(props){
 
     const commentData = props.commentData;
-    let userData;
+    const [userData, setUserData] = useState([]);
 
     useEffect(
         () => {
             async function userDataFetch() {
                 const fechedData = await fetch(`http://localhost:3001/users/info/${commentData.username}`);
-                userData = await fechedData.json();
+                const userDataObject = await fechedData.json();
+                setUserData(userDataObject);
             }
             userDataFetch();
         },[]

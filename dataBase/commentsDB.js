@@ -6,7 +6,7 @@ async function addComment({postId, title, body, username}) {
         [parseInt(postId), title, body, username]
     );
 
-    return result[0].insertid;
+    return result[0].insertId;
 }
 
 //// READ ////
@@ -30,10 +30,10 @@ async function getCommentByPostId({postId}) {
     return result[0];
 }
 
-async function getLimmitedCommentsByPostId({postId, limit, offset = 0}) {
+async function getLimmitedCommentsByPostId(postId, limit, offset = 0) {
     const result = await pool.query("SELECT * FROM comments WHERE postId = ? AND isDeleted = 0 LIMIT ? OFFSET ?",
      [parseInt(postId), parseInt(limit), parseInt(offset)]);
-
+    
     return result[0];
 }
 

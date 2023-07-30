@@ -45,11 +45,11 @@ postsRouter.get('/byId/:id', async (req, res) => {
     res.status(200).send(JSON.stringify(result));
 });
 
-postsRouter.get('/byCategory/:category', async (req, res) => {
+postsRouter.get('/byCluster/:cluster', async (req, res) => {
     let result;
 
     try {
-        result = await postsDB.getPostsByCategory(req.params);
+        result = await postsDB.getPostsByCluster(req.params);
     } catch (e) {
         res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;

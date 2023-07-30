@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Categories() {
 
@@ -22,7 +23,7 @@ export default function Categories() {
             {categories.map(
                 (category) => (
                     <div>
-                        <label>{category.category_name}</label>
+                        <Link to={`/summaries/${category.category_name}`}><label>{category.category_name}</label></Link>
                     </div>
                 )
             )}

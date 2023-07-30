@@ -18,6 +18,7 @@ summeriesRouter.get('/', async (req, res) => {
             result = await summariesDB.getSummaries();
         }
     } catch (e) {
+        console.log("problem: ", e);
         res.status(400).send(JSON.stringify("something went wrong, please try again"));
         return;
     }
@@ -30,7 +31,7 @@ summeriesRouter.get('/', async (req, res) => {
     res.status(200).send(JSON.stringify(result));
 });
 
-summeriesRouter.get('/:id', async (req, res) => {
+summeriesRouter.get('/byId/:id', async (req, res) => {
     let result;
 
     try {
@@ -48,6 +49,23 @@ summeriesRouter.get('/:id', async (req, res) => {
     res.status(200).send(JSON.stringify(result));
 });
 
+summeriesRouter.get('/byCategory/:category', async (req, res) => {
+    let result;
+
+    try {
+        result = await summariesDB.getSummaryByCategory(req.params);
+    } catch (e) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    if (!result) {
+        res.status(400).send(JSON.stringify("something went wrong, please try again"));
+        return;
+    }
+
+    res.status(200).send(JSON.stringify(result));
+});
 //// POST ////
 summeriesRouter.post('/new', async (req, res) => {
     const { error, value } = validate.newSummariesValidation(req.body);

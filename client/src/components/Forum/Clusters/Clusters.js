@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
 
 export default function Clusters() {
 
@@ -23,27 +24,28 @@ export default function Clusters() {
         }
 
         fetchCategoriesData();
-
-        console.log(clustersData);
-        console.log(categoriesData);
     },
         []
     )
 
     return (
         <>
-            <h1>Categories</h1>
+            <h1>נושאי פורום</h1>
             <div>
                 {categoriesData.map((category) => (
                     <ol>
                         <br />
                         <div>
-                            <label>{category.category_name} </label>
+                            <label><b><u>{category.category_name}</u></b> </label>
+                            <br />
                             {clustersData.filter(x => x.category == category.category_name).map(
                                 (cluster) => (
-                                    <li>
-                                        {cluster.cluster_name}
-                                    </li>
+                                    <>
+                                        <Link to={`/forum/${cluster.cluster_name}`}>
+                                            {cluster.cluster_name}
+                                        </Link>
+                                        <br />
+                                    </>
                                 ))}
                         </div>
                     </ol>

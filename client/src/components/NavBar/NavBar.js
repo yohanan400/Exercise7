@@ -27,8 +27,12 @@ export default function NavBar({userData, setuserData}){
                 <Link to="/contact">צור קשר</Link>
                 <span style={{padding:"10px"}}/>
 
-                {userData ? <><Link to="/info">פרופיל אישי</Link><button onClick={()=>logout()}>התנתק</button></> :
-                    <><Link to="/login">התחבר</Link> / <Link to="/register">הרשם</Link></>}
+                {userData ? 
+                <><Link to="/info">פרופיל אישי</Link>
+                <span style={{padding:"10px"}}/>
+                <a onClick={()=>logout()}>התנתק</a></> :
+                    <><Link to="/login">התחבר</Link> / 
+                    <Link to="/register">הרשם</Link></>}
             </div>
             <Outlet/>
         </>

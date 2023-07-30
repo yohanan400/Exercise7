@@ -40,11 +40,11 @@ export default function Info({ userDetails }) {
                 </div>
                 <div>
                     <label>תפקיד:</label>
-                    <input type="text" name="role" readOnly="readonly" placeholder={roles.length ? roles[userInfo.role_id].role_title : " " } />
+                    <input type="text" name="role" readOnly="readonly" placeholder={roles.length ? roles[userInfo.role_id-1].role_title : " " } />
                 </div>
                 <div>
                     <label>רמה:</label>
-                    <input type="text" name="access_level_id" readOnly="readonly" placeholder={accessLevel.length ? accessLevel[userInfo.access_level_Id].access_type : " "} />
+                    <input type="text" name="access_level_id" readOnly="readonly" placeholder={accessLevel.length ? accessLevel[userInfo.access_level_Id-1].access_type : " "} />
                 </div>
             </div>
         </>
